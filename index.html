@@ -8,6 +8,12 @@
     <meta name="description" content="QR: Zero-persistence, 100% client-side dual-action QR generator and scanner. Native UPI, WhatsApp, ServiceNow, Maps transit & print-ready standees." />
     <link rel="manifest" href="./manifest.json" />
     <title>QR</title>
+    <script>
+      // Ensure root domain access (https://injest.in/) redirects to the /qr/ base path
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        window.location.replace('/qr/#/' + window.location.search + window.location.hash);
+      }
+    </script>
   </head>
   <body class="bg-slate-950 text-slate-100 min-h-screen">
     <div id="root"></div>
