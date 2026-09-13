@@ -7,13 +7,15 @@ import {
   Layers, 
   Sparkles, 
   ExternalLink,
-  MoreVertical
+  MoreVertical,
+  Download
 } from 'lucide-react';
 import { DualActionGate } from './components/DualActionGate';
 import { QRGenerator } from './components/QRGenerator';
 import { ThemeToggle } from './components/ThemeToggle';
 import { SpotlightTour } from './components/SpotlightTour';
 import { MadeInBharatBadge } from './components/MadeInBharatBadge';
+import { PWAInstallModal } from './components/PWAInstallModal';
 import { getStoredTheme, setStoredTheme, applyTheme } from './utils/theme';
 import type { DualActionPayload, ThemeMode } from './types';
 
@@ -66,6 +68,56 @@ export function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isToolsMenuOpen]);
+
+  // PWA Install State & Handlers
+  interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  }
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstallable, setIsInstallable] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone === true;
+    if (isStandalone) return false;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    return isIOS;
+  });
+  const [isIOSModalOpen, setIsIOSModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsInstallable(true);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstallable(false);
+      }
+      setDeferredPrompt(null);
+    } else {
+      // Show iOS Safari guidance modal
+      setIsIOSModalOpen(true);
+    }
+  };
 
   // HashRouter parser
   const parseRouteFromHash = (): HashRouteState => {
@@ -186,9 +238,16 @@ export function App() {
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">QR</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-blue-500/15 text-blue-600 dark:text-blue-300 border border-blue-500/25 rounded">
-                  v1.0
-                </span>
+                <a
+                  href={`https://github.com/injest-in/qr/commit/${typeof __COMMIT_HASH__ !== 'undefined' ? __COMMIT_HASH__ : 'main'}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-[10px] font-mono font-bold px-1.5 py-0.5 bg-blue-500/15 hover:bg-blue-500/25 text-blue-600 dark:text-blue-300 border border-blue-500/25 rounded transition-colors"
+                  title={`Version ${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'v1.0'} (${typeof __COMMIT_HASH__ !== 'undefined' ? __COMMIT_HASH__ : 'dev'}) • Click to view commit`}
+                >
+                  {typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'v1.0'}
+                </a>
                 <MadeInBharatBadge variant="pill" />
               </div>
               <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate">
@@ -236,6 +295,18 @@ export function App() {
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Batch CSV</span>
             </button>
+
+            {/* Install App Button (Desktop) */}
+            {isInstallable && (
+              <button
+                onClick={handleInstallApp}
+                className="hidden sm:inline-flex px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                title="Install QR as an App on your device"
+              >
+                <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Install App</span>
+              </button>
+            )}
 
             {/* Spotlight Tour Button */}
             <button
@@ -333,6 +404,23 @@ export function App() {
                       <div className="text-[10px] text-slate-400">Guided spotlight walkthrough</div>
                     </div>
                   </button>
+
+                  {isInstallable && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsToolsMenuOpen(false);
+                        handleInstallApp();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 transition-colors text-left cursor-pointer"
+                    >
+                      <Download className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <div>
+                        <div className="font-semibold">Install App</div>
+                        <div className="text-[10px] text-slate-400">Save QR to home screen</div>
+                      </div>
+                    </button>
+                  )}
 
                   <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
 
@@ -478,6 +566,12 @@ export function App() {
           onComplete={handleTourClose}
         />
       )}
+
+      {/* iOS Safari PWA Installation Instructions Modal */}
+      <PWAInstallModal
+        isOpen={isIOSModalOpen}
+        onClose={() => setIsIOSModalOpen(false)}
+      />
     </div>
   );
 }

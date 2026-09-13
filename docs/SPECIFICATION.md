@@ -365,6 +365,61 @@ To establish verifiable trust for merchants and enterprise users handling sensit
 3. **Mobile Layout Optimization:**
    - App bar density: Scanner button is icon-only on mobile; desktop-only tools like Batch CSV and GitHub link are hidden on `< sm` viewports.
    - Theme toggle: Automatically renders as a compact 32px dropdown on mobile viewports (`sm:hidden`), expanding to the segmented pill on desktop (`hidden sm:flex`).
+   - Mobile More Tools menu (`MoreVertical` button) cleanly houses Staff Mode, Batch CSV Studio, Feature Tour, Install App, and GitHub Audit links.
 
+---
 
+## 11. Progressive Web App (PWA) & Native Installation Specification
 
+1. **Web App Manifest (`public/manifest.json`):**
+   - `name`: "QR — Simple & Private QR Maker"
+   - `short_name`: "QR"
+   - `display`: "standalone"
+   - `start_url`: "/qr/"
+   - `theme_color`: "#2563eb"
+   - `background_color`: "#0f172a"
+   - `icons`: Both `qr-icon.png` (512×512 PNG, `purpose: "any maskable"`) and `qr-icon.svg` (SVG format).
+   - `shortcuts`: 1-tap launcher items for Scanner (`/qr/#/scan`) and Batch CSV (`/qr/#/batch`).
+2. **Install Triggers:**
+   - Listens to the `beforeinstallprompt` event and captures the event object.
+   - **Desktop Header:** Renders a prominent, green-tinted **Install App** button with download icon.
+   - **Mobile Viewport:** Exposes an **Install App** option inside the `More Tools` dropdown.
+   - Suppressed automatically when running inside standalone mode (`display-mode: standalone` or `navigator.standalone === true`).
+3. **iOS Safari Walkthrough (`src/components/PWAInstallModal.tsx`):**
+   - Since iOS Safari does not support `beforeinstallprompt`, detecting iOS triggers an intuitive, visual modal showing exact Apple HIG steps:
+     1. Tap the **Share** button (box with upward arrow) in Safari's bottom toolbar.
+     2. Scroll down and tap **Add to Home Screen**.
+     3. Tap **Add** in the top-right corner.
+
+---
+
+## 12. Social Preview & OpenGraph Specification
+
+1. **Crawler Requirements:** Social platforms (WhatsApp, Slack, Telegram, Twitter, LinkedIn, Facebook, iMessage) refuse SVG images for link previews. They mandate standard raster formats (PNG or JPEG).
+2. **Asset Dimensions:** `public/og-image.png` conforms strictly to the recommended 1200×630 pixel resolution at 72 DPI sRGB.
+3. **Visual Composition:** Clean Slate `#090D16` dark background, sharp high-resolution vector emblem (`qr-icon.svg`), accessible typography (*"QR — Simple & Private QR Maker"*), trust badges (*"100% Private: Your data never leaves this browser"*), and the Made in Bharat Ashoka Chakra emblem.
+4. **Meta Tag Schema (`index.html`):**
+   - Standard: `<meta name="description" content="..." />`
+   - OpenGraph: `og:title`, `og:description`, `og:image`, `og:image:width="1200"`, `og:image:height="630"`, `og:url="https://injest.in/qr/"`, `og:type="website"`
+   - Twitter Card: `twitter:card="summary_large_image"`, `twitter:title`, `twitter:description`, `twitter:image`
+
+---
+
+## 13. Agentic AI & Discovery Architecture
+
+1. **Autonomous LLM Discovery (`public/llms.txt`):** Standardized markdown file summarizing product capabilities, zero-persistence privacy boundaries, and URL hash deeplink schemes for AI agents (Claude, ChatGPT, Gemini, Perplexity).
+2. **Deep Parameter Specification (`public/llms-full.txt`):** Complete programmatic parameter reference allowing AI agents to synthesize direct bookmarkable URLs without requiring browser automation.
+3. **Search & Crawler Directives (`public/robots.txt`):** Explicit permissions for search engines and modern AI agents (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `Applebot-Extended`), with canonical link to `sitemap.xml`.
+4. **XML Sitemap (`public/sitemap.xml`):** Fully indexes root URL and all primary tool hash routes with appropriate change frequencies and priorities.
+5. **JSON-LD Structured Data (`index.html`):** Embedded `schema.org/WebApplication` markup detailing application category, operating systems, feature list, and MIT licensing.
+
+---
+
+## 14. Dynamic Monotonic Build Versioning Specification
+
+1. **Build Defines (`vite.config.ts`):**
+   - `__APP_VERSION__`: Format `v1.0.<commits>` where `<commits>` is the total count of git commits (`git rev-list --count HEAD`), guaranteeing a strictly monotonic build counter.
+   - `__COMMIT_HASH__`: Short 7-character commit SHA (`git rev-parse --short HEAD`).
+   - `__BUILD_TIME__`: ISO 8601 build timestamp.
+2. **CI Fallback:** In CI pipelines or shallow clones, falls back gracefully to `process.env.GITHUB_RUN_NUMBER` or `process.env.GITHUB_SHA`. `.github/workflows/deploy.yml` specifies `fetch-depth: 0` to preserve commit history during GitHub Actions deployments.
+3. **Auditable UI Surface:** The version pill in the top navigation bar displays the current version (e.g. `v1.0.14`) and links directly to `https://github.com/injest-in/qr/commit/<hash>`, allowing users and security researchers to inspect the exact commit that produced the active deployment.

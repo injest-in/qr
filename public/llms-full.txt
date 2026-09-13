@@ -1,0 +1,47 @@
+﻿# Technical Architecture & Full Specification: QR
+
+> Complete reference manual for Autonomous AI Coding Agents & LLMs.
+> Host: https://injest.in/qr/
+> License: MIT License (Open Source)
+> Repository: https://github.com/injest-in/qr
+
+## 1. Architectural Principles
+- **100% Client-Side Execution:** The application has no server-side backend, database, tracking pixels, telemetry beacons, or external APIs. All QR matrix computation, vCard string formatting, iCalendar serialization, and PDF rendering execute in browser memory.
+- **Offline PWA:** Operates seamlessly without an active internet connection via Service Worker caching (/qr/sw.js).
+- **Deterministic Two-Way Hash Binding:** Every input field has a 250ms debounced binding to window.location.hash.
+
+## 2. Hash Route & Query Parameter Matrix
+
+| Route | Mode / Purpose | Allowed Query Parameters | Generated Protocol |
+|---|---|---|---|
+| #/whatsapp | WhatsApp Direct Chat | cc, phone, msg | https://wa.me/<cc><phone>?text=<msg> |
+| #/email | Mailto Draft | 	o, sub, ody | mailto:<to>?subject=<sub>&body=<body> |
+| #/phone | Telephone Dialer | cc, 
+um | 	el:<cc><num> |
+| #/link | Website URL | url | https://... |
+| #/upi | UPI Payment Intent | pa, pn, m, 	n | upi://pay?pa=<pa>&pn=<pn>&am=<am>&tn=<tn> |
+| #/wifi | Wi-Fi Credentials | ssid, p, 	, h | WIFI:S:<ssid>;T:<t>;P:<p>;H:<h>;; |
+| #/vcard | Business Card Contact | n, ln, 	el, em, org, 	itle, url, dr | RFC 2426 vCard 3.0 |
+| #/maps | Turn-by-Turn Navigation | lat, lng, 
+ame, mode | https://www.google.com/maps/dir/?api=1... |
+| #/calendar | iCalendar Event | 	itle, start, end, loc, desc | RFC 5545 iCalendar (BEGIN:VCALENDAR...) |
+| #/pay-gate | Merchant Dual-Action Setup | pa, pn, m, 	n, wa | https://injest.in/qr/#/pay?... |
+| #/pay | Customer Settlement Gate | pa, pn, m, 	n, wa | Renders dual UPI Pay + WhatsApp proof actions |
+| #/servicenow | ServiceNow Incident/Request | instance, 	able, mode, sys_id | Native ServiceNow navigation URLs |
+| #/form | Google / Survey Form Prefill | url | Form prefill URL |
+| #/uber | Uber Ride Dispatch | lat, lng, 
+ick | https://m.uber.com/ul/?action=setPickup... |
+| #/catalog | WhatsApp Business Catalog | cc, phone | https://wa.me/c/<cc><phone> |
+| #/batch | Batch CSV Studio | (none) | Opens bulk generation modal |
+| #/scan | Camera / File Scanner | (none) | Opens standard QR scanner |
+| #/staff | Staff Mode Inspector | (none) | Opens reverse-ingestion inspector |
+
+## 3. Reverse-Ingestion Schema Parser
+When decoding raw QR payloads:
+- Starts with WIFI: -> Decoded into SSID, Password, Encryption, Hidden flag.
+- Starts with upi://pay -> Decoded into Payee VPA, Payee Name, Amount, Note.
+- Starts with BEGIN:VCARD -> Decoded into FN, Telephone, Email, Org, Title.
+- Starts with mailto: -> Decoded into Recipient, Subject, Body.
+- Starts with 	el: -> Decoded into E.164 phone number.
+- Contains service-now.com -> Decoded into Platform or Service Portal parameters.
+- Valid JSON { or [ -> Recursively flattened into dot-delimited key/value table.

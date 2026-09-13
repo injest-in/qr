@@ -171,3 +171,9 @@ export const DEFAULT_QR_OPTIONS: QROptions = {
   margin: 4,
   logoMargin: 2
 };
+
+declare global {
+  const __APP_VERSION__: string;
+  const __COMMIT_HASH__: string;
+  const __BUILD_TIME__: string;
+}

@@ -1,29 +1,42 @@
 {
-  "name": "QR",
+  "name": "QR — Simple & Private QR Maker",
   "short_name": "QR",
-  "description": "Dual-Action Hub & Privacy-First QR Generator and Scanner",
+  "description": "Free, 100% private QR code maker & scanner that works directly in your browser. Zero tracking, zero data stored.",
   "start_url": "/qr/#/",
   "scope": "/qr/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "icons": [
     {
+      "src": "/qr/qr-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/qr/qr-icon.svg",
       "sizes": "192x192 512x512",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Scan QR",
+      "name": "Scan QR Code",
       "url": "/qr/#/scan",
-      "description": "Open QR Scanner & Reverse Ingestion"
+      "description": "Open Camera QR Scanner"
     },
     {
-      "name": "Dual-Action Pay",
-      "url": "/qr/#/pay",
-      "description": "Dual-Action Payment Gate"
+      "name": "Staff Mode",
+      "url": "/qr/#/staff",
+      "description": "Reverse-Ingestion Inspector"
+    },
+    {
+      "name": "Batch CSV Studio",
+      "url": "/qr/#/batch",
+      "description": "Bulk QR Generator"
     }
   ]
 }

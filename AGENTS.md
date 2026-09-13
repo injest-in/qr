@@ -32,6 +32,13 @@ The user's global Git configuration expects GPG signing by default, but agent sh
 git commit --no-gpg-sign -m "feat: description"
 ```
 
+### 1.5 Python Environment (`uv` Requirement)
+The user manages Python tooling exclusively with `uv`. Never invoke global `python` directly.
+**Always execute Python scripts using `uv run`:**
+```powershell
+uv run --with pillow python scratch/script.py
+```
+
 ---
 
 ## 2. Project Identity & Architecture
@@ -132,6 +139,22 @@ Every tool and all input fields must synchronize to `window.location.hash` with 
 ### 4.9 Made in Bharat Vector Branding & Simple Phrasing
 - **Plain-Language Copy:** Avoid intimidating technical jargon like "Hub & Zero-Persistence Generator" in primary headings. Use accessible, merchant-friendly language such as "Simple & Private QR Maker" and "100% Private: Your data never leaves this browser."
 - **Authentic Bharat Branding:** Uses `src/components/MadeInBharatBadge.tsx` featuring the Indian Tricolor (Saffron `#FF9933`, White `#FFFFFF`, Green `#138808`) and a crisp 24-spoke Navy Blue Ashoka Chakra (`#000080`). Supported in header (`variant="pill"`), footer (`variant="footer"`), and inline gates (`variant="inline"`).
+
+### 4.10 Progressive Web App (PWA) & Install App Triggers
+- **Web App Manifest:** Maintained in `public/manifest.json` with 512×512 PNG and SVG icon entries.
+- **Install Buttons:** Desktop header and mobile `More Tools` dropdown both render the `Install App` button when `isInstallable` is true.
+- **Standalone Suppression:** Automatically hidden when running inside standalone mode (`display-mode: standalone`).
+- **iOS Safari Fallback:** Since iOS Safari does not fire `beforeinstallprompt`, clicking Install opens `src/components/PWAInstallModal.tsx` showing clear Add-to-Home-Screen instructions.
+
+### 4.11 Dynamic Monotonic Build Versioning
+- **Resolution (`vite.config.ts`):** `resolveVersionInfo()` derives `__APP_VERSION__` as `v1.0.<count>` via `git rev-list --count HEAD` and `__COMMIT_HASH__` via `git rev-parse --short HEAD`.
+- **CI Requirement:** `.github/workflows/deploy.yml` MUST maintain `fetch-depth: 0` on checkout so GitHub Actions can calculate commit counts.
+- **UI Invariant:** The version badge in the top navigation bar links directly to the exact commit: `https://github.com/injest-in/qr/commit/${__COMMIT_HASH__}`.
+
+### 4.12 Agentic AI, SEO & Social Preview Maintenance
+- **LLM Agent Directives:** Keep `public/llms.txt` and `public/llms-full.txt` updated whenever new tool routes or query parameters are introduced. AI agents rely on these files to construct valid hash deeplinks.
+- **Social Previews (`public/og-image.png`):** Social crawlers (WhatsApp, Facebook, iMessage) only support PNG/JPEG raster formats (1200×630). Never replace `og:image` with an SVG URL.
+- **Crawlers & Sitemaps:** Ensure all new tool routes are indexed in `public/sitemap.xml` and permissions in `public/robots.txt` continue to permit both general search bots and modern LLM bots.
 
 ---
 

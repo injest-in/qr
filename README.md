@@ -76,7 +76,25 @@
    - In-app trust links let users audit client-side network calls, zero-persistence guarantees, and PWA service workers directly.
 
 12. **🇮🇳 Made in Bharat:**
-   - Built with pride in Bharat, featuring authentic Ashoka Chakra tricolor emblem in the top navigation bar and global footer.
+    - Built with pride in Bharat, featuring authentic Ashoka Chakra tricolor emblem in the top navigation bar and global footer.
+
+13. **📱 Progressive Web App (PWA) & Native Install:**
+    - Fully installable to home screen / desktop dock via standard Web App Manifest.
+    - Contextual **Install App** button in the header bar and mobile menu, accompanied by an interactive **iOS Safari Add-to-Home-Screen** guided walkthrough.
+    - Zero-network offline reliability with client-side asset caching.
+
+14. **🖼️ Plain-Language Social Previews (OpenGraph & Twitter Cards):**
+    - High-resolution 1200×630 raster preview (`public/og-image.png`) featuring clean merchant-friendly branding: *"Simple & Private QR Maker • 100% Private: Your data never leaves this browser"*.
+    - Optimized for WhatsApp, iMessage, Slack, LinkedIn, and Twitter social cards.
+
+15. **🤖 Agentic AI & Search Engine Optimization:**
+    - **`llms.txt` & `llms-full.txt`:** Machine-readable API specifications and URL hash parameter schemas designed specifically for autonomous LLM agents (ChatGPT, Claude, Gemini, Perplexity) to synthesize bookmarkable QR URLs without browser execution.
+    - **`sitemap.xml` & `robots.txt`:** Fully indexed routes with crawl permissions for search engines and modern AI crawlers (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`).
+    - **JSON-LD Structured Data:** Embedded `WebApplication` schema.org markup with capability listings and MIT open-source licensing.
+
+16. **🏷️ Dynamic Build Versioning:**
+    - Version strings (`__APP_VERSION__`, `__COMMIT_HASH__`, `__BUILD_TIME__`) automatically computed at build time from git history (`git rev-list --count HEAD` and `git rev-parse --short HEAD`).
+    - Monotonically increments on every commit and merge to `main`, hyperlinking directly to the GitHub commit log.
 
 ---
 
@@ -114,8 +132,10 @@ src/
 │   ├── QRGenerator.tsx         # Central multi-tier generator, real-time sync, exports
 │   ├── DualActionGate.tsx      # Customer payment gate (/pay)
 │   ├── CountryCodeSelect.tsx   # Country picker with flag emojis and dial codes
+│   ├── MadeInBharatBadge.tsx   # Indian Tricolor & Ashoka Chakra vector trust emblem
 │   ├── QRSettingsModal.tsx     # Precision styling, dot shapes & transparency settings
-│   ├── ThemeToggle.tsx         # Light / Dark / System segmented toggle
+│   ├── ThemeToggle.tsx         # Light / Dark / System segmented toggle & mobile dropdown
+│   ├── PWAInstallModal.tsx     # iOS Safari Add-to-Home-Screen interactive walkthrough
 │   ├── ScannerModal.tsx        # [Lazy] Camera and file drop QR scanner
 │   ├── BulkCSVModal.tsx        # [Lazy] High-throughput CSV batch generator
 │   ├── PrintPreviewModal.tsx   # [Lazy] Standee & tent card PDF print studio

@@ -54,6 +54,7 @@ src/
 │   ├── QRSettingsModal.tsx     # Precision QR styling, dot shapes, and transparency dialog
 │   ├── MadeInBharatBadge.tsx   # Authentic Indian Tricolor and 24-spoke Ashoka Chakra vector badge
 │   ├── ThemeToggle.tsx         # Light / Dark / System mode segmented toggle & mobile dropdown
+│   ├── PWAInstallModal.tsx     # iOS Safari Add-to-Home-Screen interactive guide
 │   ├── ScannerModal.tsx        # [Lazy] Camera and image file QR scanner
 │   ├── BulkCSVModal.tsx        # [Lazy] Batch generation from CSV files
 │   ├── PrintPreviewModal.tsx   # [Lazy] Standee & tent card PDF preview and exporter
@@ -212,3 +213,49 @@ graph LR
 2. **Cryptographic & Architectural Proof:** The repository contains zero backend endpoints, tracking pixels, or external persistence layers.
 3. **Auditable Egress:** All state mutations and network activity can be verified in real time via the browser's DevTools Network tab.
 
+---
+
+## 8. Dynamic Build-Time Versioning Architecture
+
+```mermaid
+graph LR
+    GitHistory[Git Repository History] -->|git rev-list --count HEAD| CommitCount[Commit Count: e.g. 14]
+    GitHistory -->|git rev-parse --short HEAD| CommitHash[Commit SHA: e.g. 6f98e60]
+    
+    CommitCount --> ViteConfig[vite.config.ts: resolveVersionInfo]
+    CommitHash --> ViteConfig
+    
+    ViteConfig -->|define constants| Bundler[Vite Production Rollup]
+    Bundler --> ClientBundle[Client JavaScript Bundle]
+    ClientBundle --> VersionBadge[Header Version Badge: v1.0.14]
+    VersionBadge -->|Click Link| GitHubCommit[https://github.com/injest-in/qr/commit/6f98e60]
+```
+
+1. **Monotonic Progression:** Instead of requiring manual version increments in `package.json`, every commit automatically increments the build counter (`v1.0.<commits>`).
+2. **Global TypeScript Invariants:** Global constants `__APP_VERSION__`, `__COMMIT_HASH__`, and `__BUILD_TIME__` are typed in `src/types/index.ts` and inlined at compile time with zero runtime overhead.
+3. **CI Pipeline Contract:** `.github/workflows/deploy.yml` sets `fetch-depth: 0` during checkout so the full commit history is available to the runner when generating release builds.
+
+---
+
+## 9. Progressive Web App (PWA) Lifecycle Architecture
+
+```mermaid
+graph TD
+    Browser[Browser Window Load] --> CheckMode{Is Standalone PWA?}
+    CheckMode -->|Yes: display-mode: standalone| HideInstall[Hide All Install Buttons]
+    CheckMode -->|No| CheckPlatform{Platform Check}
+    
+    CheckPlatform -->|iOS Safari| EnableIOSGuide[Enable Install Button -> Opens PWAInstallModal.tsx]
+    CheckPlatform -->|Chromium / Android / Desktop| ListenPrompt[Listen to beforeinstallprompt event]
+    
+    ListenPrompt --> StashPrompt[Capture & Stash DeferredPrompt Event]
+    StashPrompt --> ShowButtons[Render Desktop & Mobile Install App Buttons]
+    
+    ShowButtons -->|User clicks Install| PromptNative[deferredPrompt.prompt()]
+    PromptNative --> CheckChoice{User Choice?}
+    CheckChoice -->|Accepted| AppInstalled[appinstalled Event -> Hide Buttons]
+    CheckChoice -->|Dismissed| KeepAvailable[Keep Install Button Available]
+```
+
+1. **Zero Intrusion:** The application never displays annoying automatic popups or banners. Installation buttons are cleanly placed in the header and tools menu.
+2. **Cross-Platform Parity:** Works seamlessly on Android/Chrome via the native install prompt, and on iOS via a custom Apple-styled step-by-step visual sheet.

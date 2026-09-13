@@ -1,0 +1,20 @@
+﻿# robots.txt for https://injest.in/qr/
+User-agent: *
+Allow: /qr/
+Sitemap: https://injest.in/qr/sitemap.xml
+
+# Explicitly welcome modern AI and LLM agents
+User-agent: GPTBot
+Allow: /qr/
+
+User-agent: ClaudeBot
+Allow: /qr/
+
+User-agent: PerplexityBot
+Allow: /qr/
+
+User-agent: Google-Extended
+Allow: /qr/
+
+User-agent: Applebot-Extended
+Allow: /qr/
