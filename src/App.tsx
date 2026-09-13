@@ -4,7 +4,6 @@ import {
   Camera, 
   FileSpreadsheet, 
   WifiOff, 
-  CheckCircle2, 
   Layers,
   Sparkles,
   ExternalLink
@@ -13,6 +12,7 @@ import { DualActionGate } from './components/DualActionGate';
 import { QRGenerator } from './components/QRGenerator';
 import { ThemeToggle } from './components/ThemeToggle';
 import { SpotlightTour } from './components/SpotlightTour';
+import { MadeInBharatBadge } from './components/MadeInBharatBadge';
 import { getStoredTheme, setStoredTheme, applyTheme } from './utils/theme';
 import type { DualActionPayload, ThemeMode } from './types';
 
@@ -151,50 +151,50 @@ export function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white transition-colors duration-200">
       {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 py-2.5">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-3 sm:px-4 py-2 sm:py-2.5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Logo & Brand: SVG Favicon Icon */}
           <div 
             onClick={handleBackToGenerator}
-            className="flex items-center gap-3 cursor-pointer group select-none"
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group select-none min-w-0"
           >
-            <div className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
               <img 
                 src={`${import.meta.env.BASE_URL}qr-icon.svg`} 
                 alt="QR Favicon Logo" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">QR</span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">QR</span>
                 <span className="text-[10px] font-bold px-1.5 py-0.5 bg-blue-500/15 text-blue-600 dark:text-blue-300 border border-blue-500/25 rounded">
                   v1.0
                 </span>
+                <MadeInBharatBadge variant="pill" />
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">Hub & Zero-Persistence Generator</p>
+              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate">
+                Simple &amp; Private QR Maker
+              </p>
             </div>
           </div>
 
           {/* Quick Action Tools & Theme Switcher */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Offline Status Badge */}
-            {isOffline ? (
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 px-2 py-1 rounded-lg">
+            {isOffline && (
+              <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 px-2 py-1 rounded-lg">
                 <WifiOff className="w-3.5 h-3.5" />
                 <span>Offline Active</span>
-              </span>
-            ) : (
-              <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700/60">
-                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                <span>100% Client-Side</span>
               </span>
             )}
 
             {/* Scanner Button (HashRouter: #/scan) */}
             <button
               onClick={() => navigateTo('/scan')}
-              className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="p-1.5 sm:px-3 sm:py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Camera QR Scanner"
             >
               <Camera className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
               <span className="hidden sm:inline">Scanner</span>
@@ -210,40 +210,41 @@ export function App() {
               <span>Staff Mode</span>
             </button>
 
-            {/* Batch CSV Button (HashRouter: #/batch) */}
+            {/* Batch CSV Button (Desktop Only) */}
             <button
               onClick={() => navigateTo('/batch')}
-              className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="hidden sm:inline-flex px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer"
+              title="Bulk Batch CSV Studio"
             >
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span className="hidden sm:inline">Batch CSV</span>
+              <span>Batch CSV</span>
             </button>
 
             {/* Spotlight Tour Button */}
             <button
               onClick={() => setIsTourOpen(true)}
-              className="px-2.5 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="p-1.5 sm:px-2.5 sm:py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Take a quick guided tour"
             >
               <Sparkles className="w-3.5 h-3.5 text-blue-500" />
               <span className="hidden sm:inline">Tour</span>
             </button>
 
-            {/* Open-Source GitHub Link */}
+            {/* Open-Source GitHub Link (Desktop Only) */}
             <a
               href="https://github.com/injest-in/qr"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="hidden sm:inline-flex px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer"
               title="View open-source repository on GitHub"
             >
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                 <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
               </svg>
-              <span className="hidden sm:inline">GitHub</span>
+              <span>GitHub</span>
             </a>
 
-            {/* Theme Toggle (Light / Dark / System) */}
+            {/* Theme Toggle (Mobile Dropdown | Desktop Segmented Pill) */}
             <ThemeToggle
               currentTheme={theme}
               onThemeChange={handleThemeChange}
@@ -263,7 +264,7 @@ export function App() {
           </div>
         ) : (
           <div className="flex-1 py-4">
-            {/* Zero-Persistence Privacy Sub-header */}
+            {/* Friendly Privacy Sub-header */}
             <div className="max-w-7xl mx-auto px-4 mb-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
               <div className="flex items-center flex-wrap gap-2">
                 <span className="flex h-2 w-2 relative">
@@ -271,7 +272,7 @@ export function App() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 <span className="text-slate-700 dark:text-slate-300 font-medium">
-                  Zero-Persistence Privacy: 100% on-device. No data is stored or transmitted.
+                  100% Private &amp; On-Device: Your data never leaves this browser.
                 </span>
                 <a
                   href="https://github.com/injest-in/qr"
@@ -315,7 +316,7 @@ export function App() {
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span>QR — Zero tracking, zero storage, native intent execution.</span>
+              <span>QR — 100% private, zero tracking, works directly on your device.</span>
             </div>
             <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
             <a
@@ -328,10 +329,12 @@ export function App() {
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                 <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
               </svg>
-              <span>Open Source on GitHub</span>
+              <span>Open Source</span>
             </a>
           </div>
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap justify-center">
+            <MadeInBharatBadge variant="footer" />
+            <span>•</span>
             <a
               href="https://github.com/injest-in/qr/blob/main/LICENSE"
               target="_blank"
@@ -342,8 +345,6 @@ export function App() {
             </a>
             <span>•</span>
             <span>Free Forever</span>
-            <span>•</span>
-            <span>v1.0.0</span>
           </div>
         </div>
       </footer>

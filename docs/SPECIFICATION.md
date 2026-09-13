@@ -328,7 +328,8 @@ The application provides an interactive, zero-dependency guided spotlight tour (
 Regardless of the active user interface theme (`light`, `dark`, or `system` auto):
 - **Contrast Base Invariant:** The QR preview canvas container (`[data-tour="preview"]`) **must always preserve a light, high-contrast base** (`#ffffff` or the user's custom `bgColor`).
 - **Rationale:** Because default QR codes feature dark foreground dots (`#0f172a`) with a 100% transparent background, allowing the canvas container to adopt a dark background in dark mode would render the QR code invisible and unscannable by mobile cameras.
-- **Styling Contract:** `.qr-checkerboard` is set to `background-color: #ffffff !important` with a subtle `#f1f5f9` pattern, and the inline container dynamically applies `style={{ backgroundColor: options.isTransparent ? '#ffffff' : options.bgColor }}`.
+- **Styling Contract:** `.qr-checkerboard` is set to `background-color: #ffffff !important` with a subtle `#f1f5f9` pattern, and the inline container dynamically applies `style={{ backgroundColor: options.isTransparent || options.bgColor === 'transparent' ? '#ffffff' : options.bgColor }}`.
+- **Mobile Containment Contract:** Both `.qr-checkerboard canvas` and `.qr-checkerboard svg` are constrained with `max-width: 100% !important; height: auto !important; display: block !important;`, ensuring the rendered QR canvas never overflows the white container onto dark surrounding cards on small viewports.
 
 ---
 
@@ -344,5 +345,23 @@ To establish verifiable trust for merchants and enterprise users handling sensit
    - **Dual-Action Gate:** Features a dedicated verification link: `Audit open-source code on GitHub (MIT License)`.
    - **Global Footer:** Features `Open Source on GitHub` link and `MIT License` reference.
 4. **Verifiability Guarantee:** Users and security researchers can independently audit client-side network calls in browser DevTools to confirm zero background analytics, zero telemetry beacons, and zero remote payload transmission.
+
+---
+
+## 10. Made in Bharat Branding & Non-Technical Copy Specification
+
+1. **Branding Emblem:**
+   - Vector SVG of the Indian Tricolor (Saffron `#FF9933`, White `#FFFFFF`, Green `#138808`) with authentic 24-spoke Navy Blue Ashoka Chakra (`#000080`).
+   - Declared in `src/components/MadeInBharatBadge.tsx`.
+   - Surfaced in the top navigation bar (`variant="pill"`) and application footer (`variant="footer"`).
+2. **Simplified Copy Contract:**
+   - Header subtitle: *"Simple & Private QR Maker"* (eliminating abstract terms like "Hub & Zero-Persistence").
+   - Subheader privacy banner: *"100% Private & On-Device: Your data never leaves this browser."*
+   - Payment gate guarantee: *"100% Private: No transaction data is ever stored on servers"*.
+   - Global footer: *"QR — 100% private, zero tracking, works directly on your device."*
+3. **Mobile Layout Optimization:**
+   - App bar density: Scanner button is icon-only on mobile; desktop-only tools like Batch CSV and GitHub link are hidden on `< sm` viewports.
+   - Theme toggle: Automatically renders as a compact 32px dropdown on mobile viewports (`sm:hidden`), expanding to the segmented pill on desktop (`hidden sm:flex`).
+
 
 

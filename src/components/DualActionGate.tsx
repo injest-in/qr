@@ -15,6 +15,7 @@ import {
 import confetti from 'canvas-confetti';
 import type { DualActionPayload } from '../types';
 import { generateUPIUrl, generateWhatsAppUrl } from '../utils/qrParsers';
+import { MadeInBharatBadge } from './MadeInBharatBadge';
 
 interface DualActionGateProps {
   onBackToGenerator?: () => void;
@@ -258,20 +259,24 @@ export const DualActionGate: React.FC<DualActionGateProps> = ({
           </div>
         </div>
 
-        {/* Zero-Persistence Privacy Guarantee */}
-        <div className="mt-6 flex flex-col items-center justify-center gap-1 text-[11px] text-slate-500 text-center">
-          <div className="flex items-center gap-1.5">
+        {/* Friendly Privacy Guarantee & Bharat Branding */}
+        <div className="mt-6 flex flex-col items-center justify-center gap-1.5 text-[11px] text-slate-500 text-center">
+          <div className="flex items-center gap-1.5 font-medium text-slate-600 dark:text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Zero-Persistence: No transaction data stored on servers</span>
+            <span>100% Private: No transaction data is ever stored on servers</span>
           </div>
-          <a
-            href="https://github.com/injest-in/qr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Audit open-source code on GitHub (MIT License)
-          </a>
+          <div className="flex items-center gap-2">
+            <MadeInBharatBadge variant="inline" />
+            <span>•</span>
+            <a
+              href="https://github.com/injest-in/qr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Open Source (MIT)
+            </a>
+          </div>
         </div>
       </div>
     </div>

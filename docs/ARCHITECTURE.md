@@ -52,7 +52,8 @@ src/
 │   ├── DualActionGate.tsx      # Customer payment landing page (/pay)
 │   ├── CountryCodeSelect.tsx   # Localized country picker with flag emoji and dial codes
 │   ├── QRSettingsModal.tsx     # Precision QR styling, dot shapes, and transparency dialog
-│   ├── ThemeToggle.tsx         # Light / Dark / System mode segmented toggle
+│   ├── MadeInBharatBadge.tsx   # Authentic Indian Tricolor and 24-spoke Ashoka Chakra vector badge
+│   ├── ThemeToggle.tsx         # Light / Dark / System mode segmented toggle & mobile dropdown
 │   ├── ScannerModal.tsx        # [Lazy] Camera and image file QR scanner
 │   ├── BulkCSVModal.tsx        # [Lazy] Batch generation from CSV files
 │   ├── PrintPreviewModal.tsx   # [Lazy] Standee & tent card PDF preview and exporter

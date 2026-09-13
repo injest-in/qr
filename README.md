@@ -39,6 +39,7 @@
 4. **🌓 Light, Dark & System Theming:**
    - One-tap switcher between ☀️ Light, 🌙 Dark, and 💻 System Default mode.
    - Automatically adapts to OS color scheme changes and persists preference in `localStorage`.
+   - **Mobile Viewport Dropdown:** Responsive dropdown menu on mobile screens to preserve app bar real estate.
 
 5. **🌍 Localized Country Code Picker:**
    - Auto-detects user country using browser timezone (`Intl.DateTimeFormat`) and locale, defaulting to India (`+91`).
@@ -64,12 +65,16 @@
    - Can be re-launched anytime via the **✨ Tour** button in the header.
 
 10. **👁️ Universal Preview Visibility Invariant:**
-    - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes, ensuring dark QR codes are always clearly legible and camera-scannable.
+    - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes.
+    - Responsive canvas scaling (`max-width: 100%`) ensures QR vectors never spill outside the white base onto dark backgrounds on mobile devices.
 
 11. **🛡️ 100% Open Source & Auditable Trust:**
    - Licensed under the permissive **[MIT License](LICENSE)**.
    - Full source code is publicly hosted on [GitHub](https://github.com/injest-in/qr).
    - In-app trust links let users audit client-side network calls, zero-persistence guarantees, and PWA service workers directly.
+
+12. **🇮🇳 Made in Bharat:**
+   - Built with pride in Bharat, featuring authentic Ashoka Chakra tricolor emblem in the top navigation bar and global footer.
 
 ---
 

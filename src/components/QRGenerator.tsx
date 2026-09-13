@@ -1699,7 +1699,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
         {/* Right: Live Preview, Scannability Linter & Action Exports */}
         <div className="lg:col-span-5 space-y-5">
           {/* Main QR Card */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col items-center text-center relative text-slate-900 dark:text-slate-100">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl flex flex-col items-center text-center relative text-slate-900 dark:text-slate-100">
             
             <div className="w-full flex items-center justify-between mb-4">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -1722,12 +1722,15 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
             {/* QR Canvas Container with Transparent Checkerboard */}
             <div 
               data-tour="preview"
-              className="p-4 qr-checkerboard rounded-2xl shadow-inner border border-slate-200 dark:border-slate-800 flex items-center justify-center relative group transition-colors"
+              className="w-full max-w-[320px] mx-auto p-3 sm:p-4 bg-white qr-checkerboard rounded-2xl shadow-inner border border-slate-200 dark:border-slate-700/80 flex items-center justify-center relative overflow-hidden group transition-colors"
               style={{
-                backgroundColor: options.isTransparent ? '#ffffff' : options.bgColor
+                backgroundColor: options.isTransparent || options.bgColor === 'transparent' ? '#ffffff' : options.bgColor
               }}
             >
-              <div ref={qrCodeContainerRef} />
+              <div 
+                ref={qrCodeContainerRef} 
+                className="w-full flex items-center justify-center [&>canvas]:max-w-full [&>canvas]:h-auto [&>svg]:max-w-full [&>svg]:h-auto"
+              />
             </div>
 
             {/* Background notice */}

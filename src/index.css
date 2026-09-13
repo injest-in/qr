@@ -29,6 +29,14 @@ html, body {
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }
 
+/* Ensure child canvas/svg respects container width and never overflows onto dark backgrounds */
+.qr-checkerboard canvas,
+.qr-checkerboard svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
 /* Print Specific Media Styles */
 @media print {
   body {
