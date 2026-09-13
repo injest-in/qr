@@ -6,6 +6,34 @@ export interface DualActionPayload {
   wa?: string; // WhatsApp phone number with country code (e.g. 919876543210)
 }
 
+export interface UPIPayload {
+  pa: string;
+  pn: string;
+  am?: string;
+  tn?: string;
+}
+
+export interface WhatsAppPayload {
+  countryCode: string;
+  phone: string;
+  message?: string;
+}
+
+export interface EmailPayload {
+  to: string;
+  subject?: string;
+  body?: string;
+}
+
+export interface PhonePayload {
+  countryCode: string;
+  phone: string;
+}
+
+export interface LinkPayload {
+  url: string;
+}
+
 export interface ServiceNowField {
   key: string;
   value: string;
@@ -69,16 +97,33 @@ export interface VCardPayload {
 }
 
 export type QRMode = 
+  // Simple tools
+  | 'whatsapp'
+  | 'email'
+  | 'phone'
+  | 'link'
+  | 'upi'
+  // Medium tools
+  | 'calendar'
+  | 'vcard'
+  | 'maps'
+  | 'wifi'
+  // Advanced tools
+  | 'pay-gate'
+  | 'servicenow'
+  | 'form'
+  | 'uber'
+  | 'catalog'
+  // Aliases for compatibility
   | 'dual-action' 
-  | 'servicenow' 
   | 'generic-form' 
   | 'transit' 
-  | 'uber' 
   | 'wa-catalog' 
-  | 'wifi' 
-  | 'vcard' 
-  | 'calendar' 
   | 'url';
+
+export type ToolTier = 'simple' | 'medium' | 'advanced';
+
+export type ThemeMode = 'light' | 'dark' | 'system';
 
 export type DotType = 'dots' | 'rounded' | 'classy' | 'classy-rounded' | 'square' | 'extra-rounded';
 export type CornerSquareType = 'dot' | 'square' | 'extra-rounded';
@@ -87,7 +132,8 @@ export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 
 export interface QROptions {
   fgColor: string;
-  bgColor: string;
+  bgColor: string; // 'transparent' or '#ffffff', etc.
+  isTransparent: boolean;
   useGradient: boolean;
   gradientColor2: string;
   gradientType: 'linear' | 'radial';
@@ -110,3 +156,18 @@ export interface PrintTemplateConfig {
   humanReadableSecondary?: { label: string; value: string };
   brandColor?: string;
 }
+
+export const DEFAULT_QR_OPTIONS: QROptions = {
+  fgColor: '#0f172a',
+  bgColor: 'transparent',
+  isTransparent: true,
+  useGradient: false,
+  gradientColor2: '#2563eb',
+  gradientType: 'linear',
+  dotsType: 'dots',
+  cornersSquareType: 'extra-rounded',
+  cornersDotType: 'dot',
+  errorCorrectionLevel: 'M',
+  margin: 4,
+  logoMargin: 2
+};

@@ -22,10 +22,11 @@ export function cleanServiceNowInstance(input: string): string {
 /**
  * Builds standard UPI payment URI
  */
-export function generateUPIUrl(payload: DualActionPayload): string {
+export function generateUPIUrl(payload: { pa: string; pn: string; am?: string; tn?: string }): string {
+  if (!payload.pa && !payload.pn) return '';
   const params = new URLSearchParams();
-  params.set('pa', payload.pa.trim());
-  params.set('pn', payload.pn.trim());
+  if (payload.pa) params.set('pa', payload.pa.trim());
+  if (payload.pn) params.set('pn', payload.pn.trim());
   params.set('cu', 'INR');
   
   if (payload.am && !isNaN(Number(payload.am)) && Number(payload.am) > 0) {
@@ -48,6 +49,28 @@ export function generateWhatsAppUrl(phoneNumber: string, message: string = ''): 
 }
 
 /**
+ * Builds mailto: link with optional subject and body
+ */
+export function generateMailtoUrl(email: string, subject: string = '', body: string = ''): string {
+  const cleanEmail = email.trim();
+  if (!cleanEmail) return '';
+  const params = new URLSearchParams();
+  if (subject.trim()) params.set('subject', subject.trim());
+  if (body.trim()) params.set('body', body.trim());
+  const query = params.toString();
+  return `mailto:${cleanEmail}${query ? `?${query}` : ''}`;
+}
+
+/**
+ * Builds tel: phone call link
+ */
+export function generateTelUrl(phoneNumber: string): string {
+  const clean = phoneNumber.trim().replace(/[^\d+]/g, '');
+  if (!clean) return '';
+  return `tel:${clean}`;
+}
+
+/**
  * Builds client-side Dual-Action Gate URL for scanning using HashRouter
  */
 export function generateDualActionGateUrl(payload: DualActionPayload, baseUrl?: string): string {
@@ -62,8 +85,8 @@ export function generateDualActionGateUrl(payload: DualActionPayload, baseUrl?: 
   }
 
   const params = new URLSearchParams();
-  params.set('pa', payload.pa.trim());
-  params.set('pn', payload.pn.trim());
+  if (payload.pa) params.set('pa', payload.pa.trim());
+  if (payload.pn) params.set('pn', payload.pn.trim());
   if (payload.am) params.set('am', payload.am.trim());
   if (payload.tn) params.set('tn', payload.tn.trim());
   if (payload.wa) params.set('wa', payload.wa.trim().replace(/[^0-9]/g, ''));
@@ -103,9 +126,9 @@ export function generateServiceNowUrl(payload: ServiceNowPayload): string {
  * Builds Generic Form URL with key-value parameters
  */
 export function generateGenericFormUrl(payload: GenericFormPayload): string {
-  if (!payload.baseUrl) return '';
+  if (!payload.baseUrl || !payload.baseUrl.trim()) return '';
   try {
-    const url = new URL(payload.baseUrl);
+    const url = new URL(payload.baseUrl.trim());
     payload.fields.forEach(f => {
       if (f.key.trim()) {
         url.searchParams.set(f.key.trim(), f.value);
@@ -126,6 +149,7 @@ export function generateGenericFormUrl(payload: GenericFormPayload): string {
  * Builds Google Maps Transit Directions URL
  */
 export function generateMapsTransitUrl(payload: TransitPayload): string {
+  if (!payload.lat.trim() || !payload.lng.trim()) return '';
   const mode = payload.travelMode || 'transit';
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(payload.lat.trim())},${encodeURIComponent(payload.lng.trim())}&travelmode=${mode}`;
 }
@@ -134,6 +158,7 @@ export function generateMapsTransitUrl(payload: TransitPayload): string {
  * Builds Uber Intent URL
  */
 export function generateUberIntentUrl(payload: UberPayload): string {
+  if (!payload.dropoffLat.trim() || !payload.dropoffLng.trim()) return '';
   const nickname = encodeURIComponent(payload.dropoffNickname.trim() || 'Destination');
   return `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=${payload.dropoffLat.trim()}&dropoff[longitude]=${payload.dropoffLng.trim()}&dropoff[nickname]=${nickname}`;
 }
@@ -144,6 +169,7 @@ export function generateUberIntentUrl(payload: UberPayload): string {
 export function generateWACatalogUrl(payload: WhatsAppCatalogPayload): string {
   const code = payload.countryCode.replace(/[^0-9]/g, '');
   const phone = payload.phone.replace(/[^0-9]/g, '');
+  if (!phone) return '';
   return `https://wa.me/c/${code}${phone}`;
 }
 
@@ -158,7 +184,8 @@ function escapeWifiString(str: string): string {
  * Builds Wi-Fi configuration string
  */
 export function generateWiFiString(payload: WiFiPayload): string {
-  const ssid = escapeWifiString(payload.ssid);
+  if (!payload.ssid.trim()) return '';
+  const ssid = escapeWifiString(payload.ssid.trim());
   const pass = payload.password ? escapeWifiString(payload.password) : '';
   const enc = payload.encryption;
   const hidden = payload.hidden ? 'true' : 'false';
@@ -169,6 +196,9 @@ export function generateWiFiString(payload: WiFiPayload): string {
  * Builds vCard 3.0 contact string
  */
 export function generateVCardString(payload: VCardPayload): string {
+  if (!payload.firstName.trim() && !payload.lastName.trim() && !payload.phone?.trim() && !payload.email?.trim()) {
+    return '';
+  }
   const parts = [
     'BEGIN:VCARD',
     'VERSION:3.0',
@@ -176,12 +206,12 @@ export function generateVCardString(payload: VCardPayload): string {
     `FN:${`${payload.firstName || ''} ${payload.lastName || ''}`.trim()}`,
   ];
 
-  if (payload.organization) parts.push(`ORG:${payload.organization}`);
-  if (payload.title) parts.push(`TITLE:${payload.title}`);
-  if (payload.phone) parts.push(`TEL;TYPE=CELL:${payload.phone}`);
-  if (payload.email) parts.push(`EMAIL:${payload.email}`);
-  if (payload.url) parts.push(`URL:${payload.url}`);
-  if (payload.address) parts.push(`ADR:;;${payload.address};;;;`);
+  if (payload.organization?.trim()) parts.push(`ORG:${payload.organization.trim()}`);
+  if (payload.title?.trim()) parts.push(`TITLE:${payload.title.trim()}`);
+  if (payload.phone?.trim()) parts.push(`TEL;TYPE=CELL:${payload.phone.trim()}`);
+  if (payload.email?.trim()) parts.push(`EMAIL:${payload.email.trim()}`);
+  if (payload.url?.trim()) parts.push(`URL:${payload.url.trim()}`);
+  if (payload.address?.trim()) parts.push(`ADR:;;${payload.address.trim()};;;;`);
 
   parts.push('END:VCARD');
   return parts.join('\n');
@@ -201,6 +231,7 @@ function formatICSDate(dateStr: string): string {
  * Builds RFC 5545 Calendar string
  */
 export function generateICSString(payload: CalendarPayload): string {
+  if (!payload.title.trim() && !payload.startDate) return '';
   const dtStart = formatICSDate(payload.startDate);
   const dtEnd = payload.endDate ? formatICSDate(payload.endDate) : dtStart;
 
@@ -209,14 +240,53 @@ export function generateICSString(payload: CalendarPayload): string {
     'VERSION:2.0',
     'PRODID:-//QR//EN',
     'BEGIN:VEVENT',
-    `SUMMARY:${payload.title}`,
-    payload.description ? `DESCRIPTION:${payload.description}` : '',
-    payload.location ? `LOCATION:${payload.location}` : '',
-    `DTSTART:${dtStart}`,
-    `DTEND:${dtEnd}`,
+    `SUMMARY:${payload.title.trim()}`,
+    payload.description?.trim() ? `DESCRIPTION:${payload.description.trim()}` : '',
+    payload.location?.trim() ? `LOCATION:${payload.location.trim()}` : '',
+    dtStart ? `DTSTART:${dtStart}` : '',
+    dtEnd ? `DTEND:${dtEnd}` : '',
     'END:VEVENT',
     'END:VCALENDAR'
   ].filter(Boolean).join('\n');
+}
+
+/**
+ * Serializes tool mode and form fields into a bookmarkable URL hash
+ */
+export function serializeToolToHash(mode: string, params: Record<string, string | number | boolean | undefined>): string {
+  const sp = new URLSearchParams();
+  for (const [key, val] of Object.entries(params)) {
+    if (val !== undefined && val !== null && String(val).trim() !== '') {
+      sp.set(key, String(val).trim());
+    }
+  }
+  const query = sp.toString();
+  return `#/${mode}${query ? `?${query}` : ''}`;
+}
+
+/**
+ * Parses tool mode and query parameters from current window.location.hash
+ */
+export function parseToolFromHash(): { tool: string; params: Record<string, string> } {
+  const hash = window.location.hash || '';
+  if (!hash || hash === '#' || hash === '#/') {
+    return { tool: '', params: {} };
+  }
+  
+  // Strip leading #/ or #
+  const withoutHash = hash.replace(/^#\/?/, '');
+  const [routePart, queryPart] = withoutHash.split('?');
+  const tool = routePart ? routePart.toLowerCase().trim() : '';
+
+  const params: Record<string, string> = {};
+  if (queryPart) {
+    const sp = new URLSearchParams(queryPart);
+    sp.forEach((value, key) => {
+      params[key] = value;
+    });
+  }
+
+  return { tool, params };
 }
 
 /**
@@ -224,7 +294,7 @@ export function generateICSString(payload: CalendarPayload): string {
  */
 export interface DecodedQRInfo {
   raw: string;
-  type: 'json' | 'servicenow' | 'wifi' | 'upi' | 'vcard' | 'calendar' | 'transit' | 'url' | 'text';
+  type: 'json' | 'servicenow' | 'wifi' | 'upi' | 'vcard' | 'calendar' | 'transit' | 'url' | 'mailto' | 'tel' | 'text';
   title: string;
   parsedFields: { key: string; value: string }[];
   actionUrl?: string;
@@ -383,7 +453,40 @@ export function parseDecodedQR(raw: string): DecodedQRInfo {
     };
   }
 
-  // 6. Transit / Google Maps / Uber
+  // 6. Mailto
+  if (trimmed.startsWith('mailto:')) {
+    const url = new URL(trimmed);
+    const email = url.pathname;
+    const subject = url.searchParams.get('subject') || '';
+    const body = url.searchParams.get('body') || '';
+    return {
+      raw,
+      type: 'mailto',
+      title: 'Email Link',
+      parsedFields: [
+        { key: 'To', value: email },
+        ...(subject ? [{ key: 'Subject', value: subject }] : []),
+        ...(body ? [{ key: 'Body', value: body }] : [])
+      ],
+      actionUrl: trimmed,
+      actionLabel: 'Compose Email'
+    };
+  }
+
+  // 7. Tel
+  if (trimmed.startsWith('tel:')) {
+    const phone = trimmed.replace(/^tel:/, '');
+    return {
+      raw,
+      type: 'tel',
+      title: 'Phone Call',
+      parsedFields: [{ key: 'Number', value: phone }],
+      actionUrl: trimmed,
+      actionLabel: 'Call Number'
+    };
+  }
+
+  // 8. Transit / Google Maps / Uber
   if (trimmed.includes('google.com/maps') || trimmed.includes('uber.com')) {
     return {
       raw,
@@ -395,7 +498,7 @@ export function parseDecodedQR(raw: string): DecodedQRInfo {
     };
   }
 
-  // 7. General URL
+  // 9. General URL
   if (/^https?:\/\//i.test(trimmed)) {
     return {
       raw,
@@ -407,7 +510,7 @@ export function parseDecodedQR(raw: string): DecodedQRInfo {
     };
   }
 
-  // 8. Plain Text
+  // 10. Plain Text
   return {
     raw,
     type: 'text',
