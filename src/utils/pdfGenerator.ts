@@ -108,7 +108,7 @@ export async function generatePrintPDF(
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(160, 160, 170);
-      doc.text('Powered by SwissArmy QR • Zero-Persistence Privacy', pageWidth / 2, baseY + 135, { align: 'center' });
+      doc.text('Powered by QR • Zero-Persistence Privacy', pageWidth / 2, baseY + 135, { align: 'center' });
     };
 
     // Bottom Face (Side A)
@@ -136,7 +136,7 @@ export async function generatePrintPDF(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.setTextColor(255, 255, 255);
-    doc.text(title || 'SwissArmy QR Standee', pageWidth / 2, 14, { align: 'center' });
+    doc.text(title || 'QR Standee', pageWidth / 2, 14, { align: 'center' });
 
     if (subtitle) {
       doc.setFont('helvetica', 'normal');
@@ -197,7 +197,7 @@ export async function generatePrintPDF(
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(148, 163, 184);
-    doc.text('Official Standee • Instant Client Processing • SwissArmy QR', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    doc.text('Official Standee • Instant Client Processing • QR', pageWidth / 2, pageHeight - 10, { align: 'center' });
 
     doc.save(`${(title || 'qr-standee').toLowerCase().replace(/\s+/g, '-')}-a5-standee.pdf`);
   } else if (type === 'asset-tag-2x1') {

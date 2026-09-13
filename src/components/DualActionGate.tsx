@@ -30,22 +30,42 @@ export const DualActionGate: React.FC<DualActionGateProps> = ({
   const [shareSupported, setShareSupported] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // Ingestion: from customPayload or window.location.search
-  const [payload, setPayload] = useState<DualActionPayload>(() => {
+  // Ingestion helper: parses from customPayload, search string, and hash string
+  const parseParams = (): DualActionPayload => {
     if (customPayload) return customPayload;
-    const params = new URLSearchParams(window.location.search);
+    
+    // Parse window.location.search
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    // Parse query params in window.location.hash (e.g. #/pay?pa=... or #pay?pa=...)
+    let hashQuery = '';
+    const hash = window.location.hash;
+    const qIndex = hash.indexOf('?');
+    if (qIndex !== -1) {
+      hashQuery = hash.slice(qIndex + 1);
+    }
+    const hashParams = new URLSearchParams(hashQuery);
+
     return {
-      pa: params.get('pa') || 'merchant@upi',
-      pn: params.get('pn') || 'Merchant Store',
-      am: params.get('am') || '',
-      tn: params.get('tn') || 'Order Payment',
-      wa: params.get('wa') || '',
+      pa: hashParams.get('pa') || searchParams.get('pa') || 'merchant@upi',
+      pn: hashParams.get('pn') || searchParams.get('pn') || 'Merchant Store',
+      am: hashParams.get('am') || searchParams.get('am') || '',
+      tn: hashParams.get('tn') || searchParams.get('tn') || 'Order Payment',
+      wa: hashParams.get('wa') || searchParams.get('wa') || '',
     };
-  });
+  };
+
+  const [payload, setPayload] = useState<DualActionPayload>(parseParams);
 
   useEffect(() => {
     if (customPayload) {
       setPayload(customPayload);
+    } else {
+      const handleHashOrUrlChange = () => {
+        setPayload(parseParams());
+      };
+      window.addEventListener('hashchange', handleHashOrUrlChange);
+      return () => window.removeEventListener('hashchange', handleHashOrUrlChange);
     }
   }, [customPayload]);
 

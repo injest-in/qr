@@ -1,14 +1,15 @@
 {
-  "name": "SwissArmy QR",
-  "short_name": "SwissArmyQR",
+  "name": "QR",
+  "short_name": "QR",
   "description": "Dual-Action Hub & Privacy-First QR Generator and Scanner",
-  "start_url": "/",
+  "start_url": "/qr/#/",
+  "scope": "/qr/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/qr-icon.svg",
+      "src": "/qr/qr-icon.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml"
     }
@@ -16,12 +17,12 @@
   "shortcuts": [
     {
       "name": "Scan QR",
-      "url": "/?action=scan",
+      "url": "/qr/#/scan",
       "description": "Open QR Scanner & Reverse Ingestion"
     },
     {
       "name": "Dual-Action Pay",
-      "url": "/?mode=pay",
+      "url": "/qr/#/pay",
       "description": "Dual-Action Payment Gate"
     }
   ]

@@ -315,7 +315,7 @@ export const ScannerModal: React.FC<ScannerModalProps> = ({
                     <div id={readerElementId} className="w-full h-full" />
                   </div>
                   <p className="text-[11px] text-slate-400 text-center mt-3">
-                    Point camera at any SwissArmy QR, UPI code, Wi-Fi standee, or ServiceNow label.
+                    Point camera at any QR code, UPI code, Wi-Fi standee, or ServiceNow label.
                   </p>
                 </div>
               ) : (

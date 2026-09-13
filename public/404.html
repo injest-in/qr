@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR - Redirecting...</title>
+    <script>
+      (function () {
+        // GitHub Pages SPA HashRouter Redirect
+        // Redirects subpaths back to index.html with HashRouter format
+        var path = window.location.pathname; // e.g. "/qr/pay" or "/qr/pay/"
+        var search = window.location.search; // e.g. "?pa=merchant@upi"
+        var hash = window.location.hash;     // e.g. "#extra"
+
+        // Base repository path for GitHub Pages
+        var repoBase = '/qr';
+
+        // Extract subroute after repository base
+        var subRoute = path;
+        if (subRoute.indexOf(repoBase) === 0) {
+          subRoute = subRoute.slice(repoBase.length);
+        }
+
+        // Clean leading and trailing slashes
+        subRoute = subRoute.replace(/^\/+|\/+$/g, '');
+
+        // Construct target hash URL
+        var hashTarget = '#/' + (subRoute ? subRoute : '');
+
+        // Preserve and append query parameters to hash route
+        if (search) {
+          hashTarget += (hashTarget.indexOf('?') === -1 ? '' : '&') + search;
+        }
+
+        // Preserve existing hash if present
+        if (hash && hash !== '#') {
+          var cleanHash = hash.replace(/^#\/?/, '');
+          if (cleanHash && cleanHash !== subRoute) {
+            hashTarget += (hashTarget.indexOf('?') === -1 ? '?' : '&') + cleanHash;
+          }
+        }
+
+        var destination = window.location.origin + repoBase + '/' + hashTarget;
+        window.location.replace(destination);
+      })();
+    </script>
+  </head>
+  <body style="font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #94a3b8; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <div style="text-align: center;">
+      <h1 style="color: #f8fafc; font-size: 26px; font-weight: 700; margin-bottom: 8px;">QR</h1>
+      <p style="font-size: 14px;">Redirecting to application via HashRouter...</p>
+    </div>
+  </body>
+</html>

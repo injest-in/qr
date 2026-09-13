@@ -1,5 +1,5 @@
 # ==============================================================================
-# SwissArmy QR - Multi-Stage Dockerfile
+# QR - Multi-Stage Dockerfile
 # Stage 1: Build static assets
 # Stage 2: Deploy to GitHub Pages (gh-pages branch via container)
 # Stage 3: Local/Production Nginx server (preview exact GitHub Pages static build)

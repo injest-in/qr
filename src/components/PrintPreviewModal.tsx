@@ -249,7 +249,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({
                     )}
                   </div>
                 )}
-                <span className="text-[7px] text-slate-400 mt-3">SwissArmy QR Print Engine</span>
+                <span className="text-[7px] text-slate-400 mt-3">QR Print Engine</span>
               </div>
             )}
 

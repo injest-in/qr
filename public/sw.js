@@ -1,12 +1,18 @@
-const CACHE_NAME = 'swissarmy-qr-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/qr-icon.svg'
-];
+const CACHE_NAME = 'qr-v1';
 
 self.addEventListener('install', (event) => {
+  const basePath = self.registration.scope 
+    ? new URL(self.registration.scope).pathname.replace(/\/$/, '') 
+    : '/qr';
+
+  const STATIC_ASSETS = [
+    `${basePath}/`,
+    `${basePath}/index.html`,
+    `${basePath}/404.html`,
+    `${basePath}/manifest.json`,
+    `${basePath}/qr-icon.svg`
+  ];
+
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS);
@@ -31,13 +37,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Offline-first strategy for static assets, network-first with cache fallback for rest
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch in background to update cache (stale-while-revalidate)
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
@@ -60,9 +64,11 @@ self.addEventListener('fetch', (event) => {
         });
         return response;
       }).catch(() => {
-        // If offline and request is an HTML page navigation, return index.html
         if (event.request.headers.get('accept')?.includes('text/html')) {
-          return caches.match('/index.html');
+          const basePath = self.registration.scope 
+            ? new URL(self.registration.scope).pathname.replace(/\/$/, '') 
+            : '/qr';
+          return caches.match(`${basePath}/index.html`);
         }
       });
     })

@@ -169,7 +169,7 @@ export const BulkCSVModal: React.FC<BulkCSVModalProps> = ({ isOpen, onClose }) =
           doc.setFont('helvetica', 'italic');
           doc.setFontSize(4.5);
           doc.setTextColor(148, 163, 184);
-          doc.text('SwissArmy QR Batch Tag', 23, 22);
+          doc.text('QR Batch Tag', 23, 22);
         } else if (templateType === 'standee-a5') {
           doc.setFillColor(37, 99, 235);
           doc.rect(0, 0, pageWidth, 28, 'F');

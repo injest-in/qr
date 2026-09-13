@@ -48,18 +48,28 @@ export function generateWhatsAppUrl(phoneNumber: string, message: string = ''): 
 }
 
 /**
- * Builds client-side Dual-Action Gate URL for scanning
+ * Builds client-side Dual-Action Gate URL for scanning using HashRouter
  */
 export function generateDualActionGateUrl(payload: DualActionPayload, baseUrl?: string): string {
-  const origin = baseUrl || window.location.origin + window.location.pathname;
-  const url = new URL(origin);
-  url.searchParams.set('mode', 'pay');
-  url.searchParams.set('pa', payload.pa.trim());
-  url.searchParams.set('pn', payload.pn.trim());
-  if (payload.am) url.searchParams.set('am', payload.am.trim());
-  if (payload.tn) url.searchParams.set('tn', payload.tn.trim());
-  if (payload.wa) url.searchParams.set('wa', payload.wa.trim().replace(/[^0-9]/g, ''));
-  return url.toString();
+  let base = baseUrl;
+  if (!base) {
+    const origin = window.location.origin;
+    let path = window.location.pathname;
+    if (!path.endsWith('/')) {
+      path += '/';
+    }
+    base = origin + path;
+  }
+
+  const params = new URLSearchParams();
+  params.set('pa', payload.pa.trim());
+  params.set('pn', payload.pn.trim());
+  if (payload.am) params.set('am', payload.am.trim());
+  if (payload.tn) params.set('tn', payload.tn.trim());
+  if (payload.wa) params.set('wa', payload.wa.trim().replace(/[^0-9]/g, ''));
+
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}#/pay?${params.toString()}`;
 }
 
 /**
@@ -197,7 +207,7 @@ export function generateICSString(payload: CalendarPayload): string {
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//SwissArmy QR//EN',
+    'PRODID:-//QR//EN',
     'BEGIN:VEVENT',
     `SUMMARY:${payload.title}`,
     payload.description ? `DESCRIPTION:${payload.description}` : '',

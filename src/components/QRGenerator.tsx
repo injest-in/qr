@@ -129,13 +129,13 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
 
   const [calendar, setCalendar] = useState<CalendarPayload>({
     title: 'Product Launch Keynote',
-    description: 'Annual flagship keynote showcasing SwissArmy QR 2.0',
+    description: 'Annual flagship keynote showcasing QR 2.0',
     location: 'Main Auditorium & Live Stream',
     startDate: '2026-10-15T10:00',
     endDate: '2026-10-15T11:30'
   });
 
-  const [rawUrl, setRawUrl] = useState('https://swissarmy-qr.example.com');
+  const [rawUrl, setRawUrl] = useState('https://injest-in.github.io/qr/');
 
   // QR Visual Customization
   const [options, setOptions] = useState<QROptions>({
@@ -218,7 +218,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
       qrCodeInstanceRef.current = new QRCodeStyling({
         width: 320,
         height: 320,
-        data: rawPayload || 'https://swissarmy-qr.example.com',
+        data: rawPayload || 'https://injest-in.github.io/qr/',
         image: options.logoDataUrl,
         dotsOptions: {
           color: options.fgColor,
@@ -258,7 +258,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
       }
     } else {
       qrCodeInstanceRef.current.update({
-        data: rawPayload || 'https://swissarmy-qr.example.com',
+        data: rawPayload || 'https://injest-in.github.io/qr/',
         image: options.logoDataUrl,
         dotsOptions: {
           color: options.fgColor,
@@ -337,7 +337,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
   const handleDownloadPNG = () => {
     if (!qrCodeInstanceRef.current) return;
     qrCodeInstanceRef.current.download({
-      name: `swissarmy-qr-${activeTab}-${Date.now()}`,
+      name: `qr-${activeTab}-${Date.now()}`,
       extension: 'png'
     });
   };
@@ -345,7 +345,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
   const handleDownloadSVG = () => {
     if (!qrCodeInstanceRef.current) return;
     qrCodeInstanceRef.current.download({
-      name: `swissarmy-qr-${activeTab}-${Date.now()}`,
+      name: `qr-${activeTab}-${Date.now()}`,
       extension: 'svg'
     });
   };
@@ -390,7 +390,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
       default:
         return {
           type: 'standee-a5',
-          title: 'SwissArmy QR Code',
+          title: 'QR Code',
           subtitle: 'Scan with camera for instant action',
           humanReadablePrimary: { label: 'Action', value: activeTab.toUpperCase() }
         };
