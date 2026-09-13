@@ -183,3 +183,31 @@ Add the tool's mapping to `parseToolFromHash()` and `syncHashToUrl()` in `QRGene
 fnm env --use-on-cd | Out-String | Invoke-Expression; npm run build
 ```
 Build will verify typing and emit optimized production chunks automatically!
+
+---
+
+## 7. Open Source Trust & Security Model
+
+```mermaid
+graph LR
+    subgraph Browser ["User Browser Memory (Isolated)"]
+        FormState[User Inputs & Credentials] --> QREngine[qr-code-styling]
+        QREngine --> VectorOut[Live Canvas / SVG]
+        VectorOut --> PDFEngine[jsPDF Vector Engine]
+    end
+
+    subgraph External ["Network Boundary (Zero Egress)"]
+        NoServer[(No Remote Server)]
+        NoAnalytics[(No Tracking / Telemetry)]
+    end
+
+    FormState -.->|Egress Blocked by Design| NoServer
+    FormState -.->|Egress Blocked by Design| NoAnalytics
+
+    GitHubRepo[Public GitHub Repo & MIT License] -->|Verifiable Source Code| Browser
+```
+
+1. **Permissive Open Source:** Licensed under the MIT License (`LICENSE`), encouraging community audits, forks, and integrations.
+2. **Cryptographic & Architectural Proof:** The repository contains zero backend endpoints, tracking pixels, or external persistence layers.
+3. **Auditable Egress:** All state mutations and network activity can be verified in real time via the browser's DevTools Network tab.
+

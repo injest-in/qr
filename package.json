@@ -1,7 +1,12 @@
 {
   "name": "qr",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/injest-in/qr.git"
+  },
+  "homepage": "https://injest.in/qr/",
   "type": "module",
   "scripts": {
     "dev": "vite",

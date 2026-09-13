@@ -20,6 +20,7 @@ import {
   Printer,
   AlertTriangle,
   ExternalLink,
+  ShieldCheck,
   Palette,
   Sparkles,
   Sliders,
@@ -1812,6 +1813,23 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
                 <Palette className="w-3.5 h-3.5" />
                 <span>Customize Style</span>
               </button>
+            </div>
+
+            {/* Trust & Open Source Verification */}
+            <div className="w-full mt-3 pt-2.5 flex items-center justify-center gap-2 text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800/60">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span>100% On-Device</span>
+              <span>•</span>
+              <a
+                href="https://github.com/injest-in/qr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-500 dark:hover:text-blue-400 hover:underline inline-flex items-center gap-1 font-medium transition-colors text-slate-500 dark:text-slate-400"
+                title="Verify our zero-persistence guarantee on GitHub"
+              >
+                <span>Open Source (MIT)</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
             </div>
           </div>
         </div>

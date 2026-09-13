@@ -62,7 +62,12 @@
    - Automatically welcomes first-time visitors and can be re-launched anytime via the **✨ Tour** button in the header.
 
 10. **👁️ Universal Preview Visibility Invariant:**
-   - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes, ensuring dark QR codes are always clearly legible and camera-scannable.
+    - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes, ensuring dark QR codes are always clearly legible and camera-scannable.
+
+11. **🛡️ 100% Open Source & Auditable Trust:**
+   - Licensed under the permissive **[MIT License](LICENSE)**.
+   - Full source code is publicly hosted on [GitHub](https://github.com/injest-in/qr).
+   - In-app trust links let users audit client-side network calls, zero-persistence guarantees, and PWA service workers directly.
 
 ---
 
@@ -171,6 +176,16 @@ For deep technical details, refer to:
 
 ---
 
-## 🔒 Privacy Guarantee
-
+## 🔒 Privacy Guarantee & Verifiable Trust
+ 
 QR is designed with zero persistence. It does not use external analytics, cookies, tracking pixels, or remote database endpoints. All QR computations, contact card builds, and PDF exports are executed locally on the client device.
+ 
+Because the application is 100% open source, anyone can inspect the repository, audit network activity, and independently verify that no user data ever leaves the browser.
+ 
+---
+ 
+## 📄 License
+ 
+This project is open-source and free software licensed under the **[MIT License](LICENSE)**.
+ 
+Copyright (c) 2026 [injest-in](https://github.com/injest-in). Feel free to inspect, fork, contribute, and build upon it!

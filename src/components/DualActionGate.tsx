@@ -259,9 +259,19 @@ export const DualActionGate: React.FC<DualActionGateProps> = ({
         </div>
 
         {/* Zero-Persistence Privacy Guarantee */}
-        <div className="mt-6 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-          <span>Zero-Persistence: No transaction data stored on servers</span>
+        <div className="mt-6 flex flex-col items-center justify-center gap-1 text-[11px] text-slate-500 text-center">
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Zero-Persistence: No transaction data stored on servers</span>
+          </div>
+          <a
+            href="https://github.com/injest-in/qr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            Audit open-source code on GitHub (MIT License)
+          </a>
         </div>
       </div>
     </div>

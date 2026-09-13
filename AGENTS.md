@@ -42,6 +42,7 @@ git commit --no-gpg-sign -m "feat: description"
 | **Repository** | `https://github.com/injest-in/qr.git` |
 | **Live Production URL** | `https://injest.in/qr/` |
 | **Architecture** | 100% Client-Side React SPA, Zero-Backend, Offline-First PWA |
+| **License** | MIT License (`LICENSE`) |
 | **Core Libraries** | React 19, TypeScript 6, Vite 8, Tailwind CSS v4, Oxlint, qr-code-styling, jsPDF, html5-qrcode, PapaParse |
 
 ### Zero-Persistence Principle
@@ -112,6 +113,16 @@ Every tool and all input fields must synchronize to `window.location.hash` with 
 - Target elements are wired using `data-tour="<id>"` attributes (`tiers`, `inputs`, `bookmark`, `preview`, `customize`, `print`).
 - Tour auto-triggers on first visit and persists completion under `qr_has_seen_tour` in `localStorage`.
 - Re-triggerable anytime via the **Tour** button in the top navigation bar.
+
+### 4.8 Open Source Trust & Auditable Links
+- The repository is 100% open source under the MIT License (`https://github.com/injest-in/qr`).
+- Clear trust links to GitHub and the MIT License are surfaced in:
+  - Top header bar (`GitHub` icon button).
+  - Sub-header privacy banner (`Audit Code` link and `MIT License` badge).
+  - Generator live preview card footer (`100% On-Device • Open Source (MIT)` link).
+  - `DualActionGate.tsx` payment gate footer.
+  - Global application footer.
+- When adding or modifying views, maintain these trust surfaces so users and security engineers can always independently verify client-side isolation and zero exfiltration.
 
 ---
 

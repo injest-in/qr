@@ -325,3 +325,19 @@ Regardless of the active user interface theme (`light`, `dark`, or `system` auto
 - **Rationale:** Because default QR codes feature dark foreground dots (`#0f172a`) with a 100% transparent background, allowing the canvas container to adopt a dark background in dark mode would render the QR code invisible and unscannable by mobile cameras.
 - **Styling Contract:** `.qr-checkerboard` is set to `background-color: #ffffff !important` with a subtle `#f1f5f9` pattern, and the inline container dynamically applies `style={{ backgroundColor: options.isTransparent ? '#ffffff' : options.bgColor }}`.
 
+---
+
+## 9. Open Source Transparency & License Specification
+
+To establish verifiable trust for merchants and enterprise users handling sensitive credentials (UPI VPAs, Wi-Fi passwords, contact cards), the product adheres to an open-source auditable architecture:
+1. **License Model:** Permissive **MIT License**, formally declared in the root `LICENSE` file and `package.json`.
+2. **Public Repository:** Hosted at `https://github.com/injest-in/qr`.
+3. **In-App Trust Surface:**
+   - **Header Bar:** Quick-action GitHub button (`href="https://github.com/injest-in/qr"`).
+   - **Privacy Sub-header:** Includes explicit `Audit Code` external link to repository and `MIT License` status badge.
+   - **Preview Card Footer:** Displays `100% On-Device • Open Source (MIT)` verification link directly beneath the generated QR preview.
+   - **Dual-Action Gate:** Features a dedicated verification link: `Audit open-source code on GitHub (MIT License)`.
+   - **Global Footer:** Features `Open Source on GitHub` link and `MIT License` reference.
+4. **Verifiability Guarantee:** Users and security researchers can independently audit client-side network calls in browser DevTools to confirm zero background analytics, zero telemetry beacons, and zero remote payload transmission.
+
+
