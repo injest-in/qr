@@ -110,8 +110,10 @@ Every tool and all input fields must synchronize to `window.location.hash` with 
 
 ### 4.7 Interactive Spotlight Tour
 - The onboarding tour is managed via `src/components/SpotlightTour.tsx`.
-- Target elements are wired using `data-tour="<id>"` attributes (`tiers`, `inputs`, `bookmark`, `preview`, `customize`, `print`).
-- Tour auto-triggers on first visit and persists completion under `qr_has_seen_tour` in `localStorage`.
+- Target elements are wired using `data-tour="<id>"` attributes (`tiers`, `bookmark`, `inputs`, `preview`, `customize`, `print`).
+- Tour auto-triggers only on first visit and persists completion under `qr_has_seen_tour` in `localStorage`.
+- Includes prominent **Skip Tour** buttons in the card header and footer, backdrop dismiss, and `Escape` key support.
+- Mobile viewport adaptation: Uses vertical center scroll (`block: 'center'`) and adaptive top/bottom card docking so tooltips never clip offscreen or obscure highlighted elements.
 - Re-triggerable anytime via the **Tour** button in the top navigation bar.
 
 ### 4.8 Open Source Trust & Auditable Links

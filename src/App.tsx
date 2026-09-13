@@ -367,11 +367,13 @@ export function App() {
       </Suspense>
 
       {/* Spotlight Tour */}
-      <SpotlightTour
-        isOpen={isTourOpen}
-        onClose={handleTourClose}
-        onComplete={handleTourClose}
-      />
+      {isTourOpen && (
+        <SpotlightTour
+          isOpen={isTourOpen}
+          onClose={handleTourClose}
+          onComplete={handleTourClose}
+        />
+      )}
     </div>
   );
 }

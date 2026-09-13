@@ -707,7 +707,6 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
           </button>
 
           <button
-            data-tour="customize"
             type="button"
             onClick={() => setIsSettingsOpen(true)}
             className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
@@ -1807,8 +1806,9 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
               </button>
 
               <button
+                data-tour="customize"
                 onClick={() => setIsSettingsOpen(true)}
-                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium transition-colors"
+                className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium transition-colors cursor-pointer"
               >
                 <Palette className="w-3.5 h-3.5" />
                 <span>Customize Style</span>

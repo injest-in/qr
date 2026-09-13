@@ -58,8 +58,10 @@
    - Bulk canvas rendering and ZIP download for hundreds of QR codes at once.
 
 9. **✨ Interactive Lightweight Spotlight Tour:**
-   - Zero-dependency, SVG mask-cutout guided tour highlighting tool tiers, clean inputs, two-way bookmarking, live preview, style tuning, and the PDF print studio.
-   - Automatically welcomes first-time visitors and can be re-launched anytime via the **✨ Tour** button in the header.
+   - Zero-dependency, SVG mask-cutout guided tour highlighting tool tiers, two-way bookmarking, clean inputs, live vector preview, style customization, and the physical print studio.
+   - Welcomes first-time visitors automatically, saves completion state in `localStorage`, and includes a prominent **Skip Tour** option.
+   - Mobile-optimized: Automatically smooth-scrolls target elements into center view and uses adaptive top/bottom card docking so tooltips never clip off-screen.
+   - Can be re-launched anytime via the **✨ Tour** button in the header.
 
 10. **👁️ Universal Preview Visibility Invariant:**
     - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes, ensuring dark QR codes are always clearly legible and camera-scannable.

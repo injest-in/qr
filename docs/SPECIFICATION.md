@@ -303,18 +303,23 @@ l.replace(
 ## 7. Interactive Spotlight Onboarding Tour
 
 The application provides an interactive, zero-dependency guided spotlight tour (`src/components/SpotlightTour.tsx`) for first-time visitors:
-- **Architecture:** Zero external library footprint. Uses SVG mask cutouts (`<mask id="tour-spotlight-mask">`) with hardware-accelerated CSS backdrop dimming.
-- **Tour Steps:**
+- **Architecture:** Zero external library footprint. Uses SVG mask cutouts (`<mask id="tour-spotlight-mask">`) with hardware-accelerated CSS backdrop dimming and smooth center scrolling.
+- **Tour Steps (Optimized Top-to-Bottom Storyline):**
   1. `[data-tour="tiers"]`: Tool hierarchy (Simple, Business & Place, Advanced).
-  2. `[data-tour="inputs"]`: Clean inputs without dummy values and localized country auto-detection.
-  3. `[data-tour="bookmark"]`: Real-time two-way URL deeplink synchronization and bookmarking.
+  2. `[data-tour="bookmark"]`: Real-time two-way URL deeplink synchronization and bookmarking.
+  3. `[data-tour="inputs"]`: Clean inputs without dummy values and localized country auto-detection.
   4. `[data-tour="preview"]`: High-visibility vector rendering on high-contrast base.
   5. `[data-tour="customize"]`: Precision styling controls (dots, corner eyes, error correction).
   6. `[data-tour="print"]`: Print-ready physical PDF studio.
-- **Trigger Contract:**
-  - Automatic on first visit: checks `localStorage.getItem('qr_has_seen_tour') !== 'true'`.
-  - On-Demand: Users can re-trigger the tour anytime via the **✨ Tour** button in the app bar.
-- **Keyboard Navigation:** Supports `Escape` to close, `ArrowRight`/`Enter` for next, `ArrowLeft` for back.
+- **Mobile Viewport Optimization & Scroll-to-Highlight:**
+  - Automatic smooth scrolling to vertical center (`block: 'center'`).
+  - Read-only scroll & resize listeners measure bounds without triggering recursive `scrollIntoView` calls, ensuring zero stuttering.
+  - Adaptive Top/Bottom Docking on mobile screens (`< 640px`): Automatically docks the tooltip card at the top if the target element is in the bottom half of the screen, or at the bottom if the target is in the top half. This guarantees that highlighted controls are never covered and the card never clips offscreen.
+- **Dismissal & Skip Controls:**
+  - Prominent **Skip Tour** buttons in the card header and footer.
+  - Backdrop click and `Escape` key dismissals.
+  - State persisted in `localStorage: qr_has_seen_tour`. The tour only auto-launches on the user's initial visit and remains closed on subsequent sessions.
+- **On-Demand Relaunch:** Can be relaunched anytime via the **✨ Tour** button in the app bar, which always restarts clean at Step 1.
 
 ---
 
