@@ -159,6 +159,7 @@ npm run lint
 For deep technical details, refer to:
 - [📖 Functional Specification Document](docs/SPECIFICATION.md) — Comprehensive functional requirements (FR-A through FR-J), payload schemas, routing contracts, and storage guidelines.
 - [🏛️ Architecture & Engineering Guide](docs/ARCHITECTURE.md) — System architecture, sequence diagrams, bundle optimization strategy, and extension tutorial.
+- [🤖 Agent Guide & Operational Manual](AGENTS.md) — Environment configuration, `fnm` instructions, PowerShell gotchas, and architectural invariants for AI coding assistants.
 
 ---
 
