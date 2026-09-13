@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <rect width="100" height="100" rx="20" fill="#2563eb"/>
+  <!-- Corner 1 -->
+  <rect x="15" y="15" width="26" height="26" rx="6" stroke="#ffffff" stroke-width="4" fill="none"/>
+  <rect x="22" y="22" width="12" height="12" rx="3" fill="#ffffff"/>
+  <!-- Corner 2 -->
+  <rect x="59" y="15" width="26" height="26" rx="6" stroke="#ffffff" stroke-width="4" fill="none"/>
+  <rect x="66" y="22" width="12" height="12" rx="3" fill="#ffffff"/>
+  <!-- Corner 3 -->
+  <rect x="15" y="59" width="26" height="26" rx="6" stroke="#ffffff" stroke-width="4" fill="none"/>
+  <rect x="22" y="66" width="12" height="12" rx="3" fill="#ffffff"/>
+  <!-- Center elements / lightning bolt / swiss army cross -->
+  <path d="M50 42v16M42 50h16" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+  <!-- Decorative dots -->
+  <circle cx="50" cy="72" r="4" fill="#ffffff"/>
+  <circle cx="72" cy="50" r="4" fill="#ffffff"/>
+  <rect x="64" y="64" width="16" height="16" rx="4" fill="#38bdf8"/>
+</svg>
