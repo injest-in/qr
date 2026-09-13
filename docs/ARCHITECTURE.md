@@ -55,7 +55,8 @@ src/
 │   ├── ThemeToggle.tsx         # Light / Dark / System mode segmented toggle
 │   ├── ScannerModal.tsx        # [Lazy] Camera and image file QR scanner
 │   ├── BulkCSVModal.tsx        # [Lazy] Batch generation from CSV files
-│   └── PrintPreviewModal.tsx   # [Lazy] Standee & tent card PDF preview and exporter
+│   ├── PrintPreviewModal.tsx   # [Lazy] Standee & tent card PDF preview and exporter
+│   └── SpotlightTour.tsx       # Interactive zero-dependency guided spotlight onboarding tour
 └── utils/
     ├── countryCodes.ts         # List of world countries and auto-detection algorithm
     ├── qrParsers.ts            # Protocol generators, deeplink serializers & parsers

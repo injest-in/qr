@@ -297,3 +297,31 @@ l.replace(
 4. **Vite Base Path:** Configured as `base: '/qr/'` in `vite.config.ts`.
 5. **Jekyll Bypass:** `public/.nojekyll` ensures that files starting with underscores are preserved by GitHub Pages.
 6. **Deployment Pipeline:** `.github/workflows/deploy.yml` uses Node 24 and `actions/deploy-pages@v4`.
+
+---
+
+## 7. Interactive Spotlight Onboarding Tour
+
+The application provides an interactive, zero-dependency guided spotlight tour (`src/components/SpotlightTour.tsx`) for first-time visitors:
+- **Architecture:** Zero external library footprint. Uses SVG mask cutouts (`<mask id="tour-spotlight-mask">`) with hardware-accelerated CSS backdrop dimming.
+- **Tour Steps:**
+  1. `[data-tour="tiers"]`: Tool hierarchy (Simple, Business & Place, Advanced).
+  2. `[data-tour="inputs"]`: Clean inputs without dummy values and localized country auto-detection.
+  3. `[data-tour="bookmark"]`: Real-time two-way URL deeplink synchronization and bookmarking.
+  4. `[data-tour="preview"]`: High-visibility vector rendering on high-contrast base.
+  5. `[data-tour="customize"]`: Precision styling controls (dots, corner eyes, error correction).
+  6. `[data-tour="print"]`: Print-ready physical PDF studio.
+- **Trigger Contract:**
+  - Automatic on first visit: checks `localStorage.getItem('qr_has_seen_tour') !== 'true'`.
+  - On-Demand: Users can re-trigger the tour anytime via the **✨ Tour** button in the app bar.
+- **Keyboard Navigation:** Supports `Escape` to close, `ArrowRight`/`Enter` for next, `ArrowLeft` for back.
+
+---
+
+## 8. Universal Preview Visibility Invariant
+
+Regardless of the active user interface theme (`light`, `dark`, or `system` auto):
+- **Contrast Base Invariant:** The QR preview canvas container (`[data-tour="preview"]`) **must always preserve a light, high-contrast base** (`#ffffff` or the user's custom `bgColor`).
+- **Rationale:** Because default QR codes feature dark foreground dots (`#0f172a`) with a 100% transparent background, allowing the canvas container to adopt a dark background in dark mode would render the QR code invisible and unscannable by mobile cameras.
+- **Styling Contract:** `.qr-checkerboard` is set to `background-color: #ffffff !important` with a subtle `#f1f5f9` pattern, and the inline container dynamically applies `style={{ backgroundColor: options.isTransparent ? '#ffffff' : options.bgColor }}`.
+

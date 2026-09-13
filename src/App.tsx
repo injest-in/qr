@@ -5,11 +5,13 @@ import {
   FileSpreadsheet, 
   WifiOff, 
   CheckCircle2, 
-  Layers
+  Layers,
+  Sparkles
 } from 'lucide-react';
 import { DualActionGate } from './components/DualActionGate';
 import { QRGenerator } from './components/QRGenerator';
 import { ThemeToggle } from './components/ThemeToggle';
+import { SpotlightTour } from './components/SpotlightTour';
 import { getStoredTheme, setStoredTheme, applyTheme } from './utils/theme';
 import type { DualActionPayload, ThemeMode } from './types';
 
@@ -74,6 +76,24 @@ export function App() {
   const [routeState, setRouteState] = useState<HashRouteState>(parseRouteFromHash);
   const [testPayload, setTestPayload] = useState<DualActionPayload | undefined>();
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  // Spotlight Tour state (triggers on first visit or on demand)
+  const [isTourOpen, setIsTourOpen] = useState(() => {
+    try {
+      return localStorage.getItem('qr_has_seen_tour') !== 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleTourClose = () => {
+    setIsTourOpen(false);
+    try {
+      localStorage.setItem('qr_has_seen_tour', 'true');
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     const onHashChange = () => {
@@ -198,6 +218,16 @@ export function App() {
               <span className="hidden sm:inline">Batch CSV</span>
             </button>
 
+            {/* Spotlight Tour Button */}
+            <button
+              onClick={() => setIsTourOpen(true)}
+              className="px-2.5 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Take a quick guided tour"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+              <span className="hidden sm:inline">Tour</span>
+            </button>
+
             {/* Theme Toggle (Light / Dark / System) */}
             <ThemeToggle
               currentTheme={theme}
@@ -274,6 +304,13 @@ export function App() {
           />
         )}
       </Suspense>
+
+      {/* Spotlight Tour */}
+      <SpotlightTour
+        isOpen={isTourOpen}
+        onClose={handleTourClose}
+        onComplete={handleTourClose}
+      />
     </div>
   );
 }

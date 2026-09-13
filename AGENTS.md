@@ -96,7 +96,7 @@ Every tool and all input fields must synchronize to `window.location.hash` with 
 - **Default Corner Eyes:** Extra-rounded (`extra-rounded`).
 - **Default Corner Dots:** Circular dot (`dot`).
 - **Settings Modal:** Advanced visual controls live in `src/components/QRSettingsModal.tsx` via the **Customize Style** button.
-- **Canvas Preview:** The container uses `.qr-checkerboard` so transparent codes are visible in both light and dark themes.
+- **Canvas Preview Invariant:** Irrespective of whether the active theme is Light, Dark, or System Auto, the QR preview container (`[data-tour="preview"]`) **must always preserve a light, high-contrast base** (`#ffffff` or user's custom `bgColor`). Never allow the canvas container to invert to dark in dark mode, because default dark QR codes would become invisible.
 
 ### 4.5 Theming
 - Light, Dark, and System Default themes are managed via `src/utils/theme.ts` and `src/components/ThemeToggle.tsx`.
@@ -106,6 +106,12 @@ Every tool and all input fields must synchronize to `window.location.hash` with 
 ### 4.6 Country Code Picker
 - Phone numbers in WhatsApp, Phone Call, and Catalog use `src/components/CountryCodeSelect.tsx`.
 - Country is auto-detected via timezone and browser language with a fallback to India (`+91`).
+
+### 4.7 Interactive Spotlight Tour
+- The onboarding tour is managed via `src/components/SpotlightTour.tsx`.
+- Target elements are wired using `data-tour="<id>"` attributes (`tiers`, `inputs`, `bookmark`, `preview`, `customize`, `print`).
+- Tour auto-triggers on first visit and persists completion under `qr_has_seen_tour` in `localStorage`.
+- Re-triggerable anytime via the **Tour** button in the top navigation bar.
 
 ---
 

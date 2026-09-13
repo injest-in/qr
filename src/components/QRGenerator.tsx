@@ -642,7 +642,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
     <div className="w-full max-w-7xl mx-auto px-4 py-4">
       {/* Tier Selector: Simple | Business & Place | Advanced */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-        <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 self-start sm:self-auto">
+        <div data-tour="tiers" className="inline-flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => {
@@ -695,9 +695,10 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
         {/* Bookmarking & Settings Quick Bar */}
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <button
+            data-tour="bookmark"
             type="button"
             onClick={handleCopyBookmarkLink}
-            className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
             title="Bookmark or share this QR link with pre-filled inputs"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Bookmark className="w-3.5 h-3.5 text-blue-500" />}
@@ -705,9 +706,10 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
           </button>
 
           <button
+            data-tour="customize"
             type="button"
             onClick={() => setIsSettingsOpen(true)}
-            className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>Customize Style</span>
@@ -901,7 +903,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
       {/* Main Grid: Form Inputs Left, Real-time QR Preview & Linter Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Input Configuration Form */}
-        <div className="lg:col-span-7 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl space-y-6 text-slate-900 dark:text-slate-100">
+        <div data-tour="inputs" className="lg:col-span-7 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl space-y-6 text-slate-900 dark:text-slate-100">
           
           {/* TOOL 1: WHATSAPP CHAT */}
           {activeTab === 'whatsapp' && (
@@ -1718,7 +1720,13 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
             </div>
 
             {/* QR Canvas Container with Transparent Checkerboard */}
-            <div className="p-4 qr-checkerboard rounded-2xl shadow-inner border border-slate-200 dark:border-slate-800 flex items-center justify-center relative group">
+            <div 
+              data-tour="preview"
+              className="p-4 qr-checkerboard rounded-2xl shadow-inner border border-slate-200 dark:border-slate-800 flex items-center justify-center relative group transition-colors"
+              style={{
+                backgroundColor: options.isTransparent ? '#ffffff' : options.bgColor
+              }}
+            >
               <div ref={qrCodeContainerRef} />
             </div>
 
@@ -1726,7 +1734,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
             <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
               <span>
-                {options.isTransparent ? 'Transparent Background Active (Ready for posters & stands)' : `Custom Background: ${options.bgColor}`}
+                {options.isTransparent ? 'Transparent Background Active (High-Contrast White Base)' : `Custom Background: ${options.bgColor}`}
               </span>
             </div>
 
@@ -1779,6 +1787,7 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
 
             {/* Module E: Physical Print-Ready PDF Studio Button */}
             <button
+              data-tour="print"
               onClick={() => setIsPrintModalOpen(true)}
               className="w-full mt-2.5 py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all active:scale-98 cursor-pointer"
             >
