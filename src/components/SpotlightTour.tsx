@@ -252,42 +252,22 @@ export const SpotlightTour: React.FC<SpotlightTourProps> = ({
       className="fixed inset-0 z-50 overflow-hidden font-sans select-none animate-in fade-in duration-200"
       onClick={dismissTour}
     >
-      {/* SVG Spotlight Mask */}
-      {targetRect && (
-        <svg className="fixed inset-0 w-full h-full pointer-events-none transition-all duration-300">
-          <defs>
-            <mask id="tour-spotlight-mask">
-              <rect width="100%" height="100%" fill="white" />
-              <rect
-                x={Math.max(0, targetRect.left - padding)}
-                y={Math.max(0, targetRect.top - padding)}
-                width={targetRect.width + padding * 2}
-                height={targetRect.height + padding * 2}
-                rx="14"
-                fill="black"
-              />
-            </mask>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            fill="rgba(2, 6, 23, 0.75)"
-            mask="url(#tour-spotlight-mask)"
-          />
-        </svg>
-      )}
-
-      {/* Target Focus Ring Accent */}
-      {targetRect && (
+      {/* Spotlight Cutout Overlay using box-shadow: 100% reliable across all browsers & Brave Night Mode */}
+      {targetRect ? (
         <div
-          className="fixed pointer-events-none rounded-2xl border-2 border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.6)] transition-all duration-150"
+          className="fixed pointer-events-none rounded-2xl transition-all duration-200"
           style={{
             top: targetRect.top - padding,
             left: targetRect.left - padding,
             width: targetRect.width + padding * 2,
             height: targetRect.height + padding * 2,
+            boxShadow: '0 0 0 9999px rgba(2, 6, 23, 0.8), 0 0 25px rgba(59, 130, 246, 0.6)',
+            border: '2px solid #3b82f6',
+            zIndex: 45
           }}
         />
+      ) : (
+        <div className="fixed inset-0 bg-slate-950/80 pointer-events-none transition-opacity duration-200 z-45" />
       )}
 
       {/* Floating Tour Tooltip Card */}

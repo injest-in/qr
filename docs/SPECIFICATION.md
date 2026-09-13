@@ -303,7 +303,7 @@ l.replace(
 ## 7. Interactive Spotlight Onboarding Tour
 
 The application provides an interactive, zero-dependency guided spotlight tour (`src/components/SpotlightTour.tsx`) for first-time visitors:
-- **Architecture:** Zero external library footprint. Uses SVG mask cutouts (`<mask id="tour-spotlight-mask">`) with hardware-accelerated CSS backdrop dimming and smooth center scrolling.
+- **Architecture:** Zero external library footprint. Uses a fixed `box-shadow` cutout overlay (`box-shadow: 0 0 0 9999px rgba(2, 6, 23, 0.8)`) with an integrated glowing accent ring (`border: 2px solid #3b82f6`) and transparent center. This completely bypasses fragile SVG mask luminance inversions in Brave Browser's Night Mode and mobile Chromium Force Dark, ensuring the element in focus always retains 100% original brightness and sharpness.
 - **Tour Steps (Optimized Top-to-Bottom Storyline):**
   1. `[data-tour="tiers"]`: Tool hierarchy (Simple, Business & Place, Advanced).
   2. `[data-tour="bookmark"]`: Real-time two-way URL deeplink synchronization and bookmarking.
@@ -323,12 +323,15 @@ The application provides an interactive, zero-dependency guided spotlight tour (
 
 ---
 
-## 8. Universal Preview Visibility Invariant
+## 8. Universal Preview Visibility Invariant & Anti-Inversion Rules
 
 Regardless of the active user interface theme (`light`, `dark`, or `system` auto):
-- **Contrast Base Invariant:** The QR preview canvas container (`[data-tour="preview"]`) **must always preserve a light, high-contrast base** (`#ffffff` or the user's custom `bgColor`).
+- **Contrast Base Invariant:** The QR preview canvas container (`[data-tour="preview"]`) **must always preserve a light, high-contrast base** (`#ffffff` or user's custom `bgColor`).
 - **Rationale:** Because default QR codes feature dark foreground dots (`#0f172a`) with a 100% transparent background, allowing the canvas container to adopt a dark background in dark mode would render the QR code invisible and unscannable by mobile cameras.
-- **Styling Contract:** `.qr-checkerboard` is set to `background-color: #ffffff !important` with a subtle `#f1f5f9` pattern, and the inline container dynamically applies `style={{ backgroundColor: options.isTransparent || options.bgColor === 'transparent' ? '#ffffff' : options.bgColor }}`.
+- **Anti-Inversion Engine:**
+  1. `<meta name="color-scheme" content="light dark" />` in `index.html` signals to Chromium/Brave that the author natively manages dark themes, disabling algorithmic Force Dark inversion on page elements.
+  2. `color-scheme: only light` is explicitly applied to the preview container and `.qr-checkerboard`, preventing Brave's Night Mode heuristic from inverting `#ffffff` to dark.
+  3. Dynamic base calculation: When foreground dots are inverted to white (`fgColor === '#ffffff'`), the preview container dynamically shifts to a dark base (`#0f172a`, `color-scheme: only dark`) so inverted codes remain clearly visible.
 - **Mobile Containment Contract:** Both `.qr-checkerboard canvas` and `.qr-checkerboard svg` are constrained with `max-width: 100% !important; height: auto !important; display: block !important;`, ensuring the rendered QR canvas never overflows the white container onto dark surrounding cards on small viewports.
 
 ---

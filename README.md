@@ -59,14 +59,16 @@
    - Bulk canvas rendering and ZIP download for hundreds of QR codes at once.
 
 9. **✨ Interactive Lightweight Spotlight Tour:**
-   - Zero-dependency, SVG mask-cutout guided tour highlighting tool tiers, two-way bookmarking, clean inputs, live vector preview, style customization, and the physical print studio.
+   - Zero-dependency guided tour using a crisp CSS `box-shadow` cutout overlay with transparent center and glowing focus ring.
+   - Bypasses mobile browser mask inversion quirks (including Brave Android Night Mode), ensuring focused controls always remain 100% bright and clear.
    - Welcomes first-time visitors automatically, saves completion state in `localStorage`, and includes a prominent **Skip Tour** option.
    - Mobile-optimized: Automatically smooth-scrolls target elements into center view and uses adaptive top/bottom card docking so tooltips never clip off-screen.
    - Can be re-launched anytime via the **✨ Tour** button in the header.
 
-10. **👁️ Universal Preview Visibility Invariant:**
-    - The QR preview container explicitly maintains a high-contrast light base (`#ffffff` or user's chosen `bgColor`) across Light, Dark, and System Auto modes.
-    - Responsive canvas scaling (`max-width: 100%`) ensures QR vectors never spill outside the white base onto dark backgrounds on mobile devices.
+10. **👁️ Universal Preview Visibility & Anti-Inversion:**
+    - The QR preview container explicitly maintains a high-contrast base (`#ffffff` by default; automatically shifts to `#0f172a` when foreground dots are inverted to white).
+    - Enforces `<meta name="color-scheme" content="light dark" />` and `color-scheme: only light` to prevent aggressive browser dark-mode algorithms (like Brave Mobile Night Mode) from darkening the preview base.
+    - Responsive canvas scaling (`max-width: 100%`) ensures QR vectors never spill outside the white base onto surrounding cards on narrow screens.
 
 11. **🛡️ 100% Open Source & Auditable Trust:**
    - Licensed under the permissive **[MIT License](LICENSE)**.

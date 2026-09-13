@@ -1,12 +1,13 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { 
   ShieldCheck, 
   Camera, 
   FileSpreadsheet, 
   WifiOff, 
-  Layers,
-  Sparkles,
-  ExternalLink
+  Layers, 
+  Sparkles, 
+  ExternalLink,
+  MoreVertical
 } from 'lucide-react';
 import { DualActionGate } from './components/DualActionGate';
 import { QRGenerator } from './components/QRGenerator';
@@ -49,6 +50,22 @@ export function App() {
     setStoredTheme(newTheme);
     applyTheme(newTheme);
   };
+
+  // Mobile overflow tools menu state
+  const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
+  const toolsMenuRef = useRef<HTMLDivElement | null>(null);
+
+  // Close mobile tools menu on outside click
+  useEffect(() => {
+    if (!isToolsMenuOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (toolsMenuRef.current && !toolsMenuRef.current.contains(event.target as Node)) {
+        setIsToolsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isToolsMenuOpen]);
 
   // HashRouter parser
   const parseRouteFromHash = (): HashRouteState => {
@@ -203,7 +220,7 @@ export function App() {
             {/* Staff Reverse-Ingestion Scanner Button (HashRouter: #/staff) */}
             <button
               onClick={() => navigateTo('/staff')}
-              className="hidden lg:inline-flex px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer"
+              className="hidden sm:inline-flex px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer"
               title="Staff Reverse-Ingestion Camera Mode"
             >
               <Layers className="w-3.5 h-3.5" />
@@ -223,11 +240,11 @@ export function App() {
             {/* Spotlight Tour Button */}
             <button
               onClick={() => setIsTourOpen(true)}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="hidden sm:inline-flex p-1.5 sm:px-2.5 sm:py-1.5 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-lg items-center gap-1.5 transition-colors cursor-pointer"
               title="Take a quick guided tour"
             >
               <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-              <span className="hidden sm:inline">Tour</span>
+              <span>Tour</span>
             </button>
 
             {/* Open-Source GitHub Link (Desktop Only) */}
@@ -249,6 +266,92 @@ export function App() {
               currentTheme={theme}
               onThemeChange={handleThemeChange}
             />
+
+            {/* Mobile More Tools Menu (sm:hidden) */}
+            <div className="relative sm:hidden" ref={toolsMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsToolsMenuOpen(prev => !prev)}
+                className={`p-1.5 rounded-lg border text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer ${
+                  isToolsMenuOpen
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                }`}
+                title="More Studio Tools"
+                aria-label="More studio tools menu"
+              >
+                <MoreVertical className="w-3.5 h-3.5" />
+              </button>
+
+              {isToolsMenuOpen && (
+                <div className="absolute right-0 top-full mt-1.5 w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    Studio Tools &amp; Actions
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsToolsMenuOpen(false);
+                      navigateTo('/staff');
+                    }}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg text-slate-700 dark:text-slate-200 hover:bg-amber-500/10 hover:text-amber-700 dark:hover:text-amber-300 transition-colors text-left cursor-pointer"
+                  >
+                    <Layers className="w-4 h-4 text-amber-500 shrink-0" />
+                    <div>
+                      <div className="font-semibold">Staff Mode</div>
+                      <div className="text-[10px] text-slate-400">Reverse-ingestion inspector</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsToolsMenuOpen(false);
+                      navigateTo('/batch');
+                    }}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg text-slate-700 dark:text-slate-200 hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors text-left cursor-pointer"
+                  >
+                    <FileSpreadsheet className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <div>
+                      <div className="font-semibold">Batch CSV Studio</div>
+                      <div className="text-[10px] text-slate-400">Bulk generation from CSV</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsToolsMenuOpen(false);
+                      setIsTourOpen(true);
+                    }}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg text-slate-700 dark:text-slate-200 hover:bg-blue-500/10 hover:text-blue-700 dark:hover:text-blue-300 transition-colors text-left cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-blue-500 shrink-0" />
+                    <div>
+                      <div className="font-semibold">Feature Tour</div>
+                      <div className="text-[10px] text-slate-400">Guided spotlight walkthrough</div>
+                    </div>
+                  </button>
+
+                  <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+
+                  <a
+                    href="https://github.com/injest-in/qr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsToolsMenuOpen(false)}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left cursor-pointer"
+                  >
+                    <ExternalLink className="w-4 h-4 text-slate-400 shrink-0" />
+                    <div>
+                      <div className="font-semibold">Audit Code (GitHub)</div>
+                      <div className="text-[10px] text-slate-400">100% Open Source (MIT)</div>
+                    </div>
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>

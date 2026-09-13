@@ -26,7 +26,9 @@ import {
   Sliders,
   Bookmark,
   SunMoon,
-  Navigation
+  Navigation,
+  Camera,
+  FileSpreadsheet
 } from 'lucide-react';
 import type { 
   QRMode, 
@@ -896,6 +898,36 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
               <Store className="w-4 h-4" />
               <span>Store Catalog</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => { window.location.hash = '/batch'; }}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition-all bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 cursor-pointer"
+              title="Open Bulk Batch CSV Studio"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Batch CSV Studio</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { window.location.hash = '/staff'; }}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition-all bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/60 border border-amber-200 dark:border-amber-800 cursor-pointer"
+              title="Open Staff Reverse-Ingestion Inspector"
+            >
+              <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <span>Staff Mode</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { window.location.hash = '/scan'; }}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition-all bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-950/60 border border-blue-200 dark:border-blue-800 cursor-pointer"
+              title="Open Camera QR Scanner"
+            >
+              <Camera className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>Camera Scanner</span>
+            </button>
           </>
         )}
       </div>
@@ -1719,27 +1751,42 @@ export const QRGenerator: React.FC<QRGeneratorProps> = ({ onOpenDualActionGate }
               </button>
             </div>
 
-            {/* QR Canvas Container with Transparent Checkerboard */}
-            <div 
-              data-tour="preview"
-              className="w-full max-w-[320px] mx-auto p-3 sm:p-4 bg-white qr-checkerboard rounded-2xl shadow-inner border border-slate-200 dark:border-slate-700/80 flex items-center justify-center relative overflow-hidden group transition-colors"
-              style={{
-                backgroundColor: options.isTransparent || options.bgColor === 'transparent' ? '#ffffff' : options.bgColor
-              }}
-            >
-              <div 
-                ref={qrCodeContainerRef} 
-                className="w-full flex items-center justify-center [&>canvas]:max-w-full [&>canvas]:h-auto [&>svg]:max-w-full [&>svg]:h-auto"
-              />
-            </div>
+            {/* QR Canvas Container with Guaranteed High-Contrast Base */}
+            {(() => {
+              const isFgLight = options.fgColor === '#ffffff' || options.fgColor === '#fff';
+              const previewBaseColor = options.isTransparent || options.bgColor === 'transparent'
+                ? (isFgLight ? '#0f172a' : '#ffffff')
+                : options.bgColor;
 
-            {/* Background notice */}
-            <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              <span>
-                {options.isTransparent ? 'Transparent Background Active (High-Contrast White Base)' : `Custom Background: ${options.bgColor}`}
-              </span>
-            </div>
+              return (
+                <>
+                  <div 
+                    data-tour="preview"
+                    className="w-full max-w-[320px] mx-auto p-3 sm:p-4 rounded-2xl shadow-inner border border-slate-200 dark:border-slate-700/80 flex items-center justify-center relative overflow-hidden group transition-colors"
+                    style={{
+                      backgroundColor: previewBaseColor,
+                      colorScheme: isFgLight ? 'only dark' : 'only light'
+                    }}
+                  >
+                    <div 
+                      ref={qrCodeContainerRef} 
+                      className="w-full flex items-center justify-center [&>canvas]:max-w-full [&>canvas]:h-auto [&>svg]:max-w-full [&>svg]:h-auto"
+                      style={{ colorScheme: isFgLight ? 'only dark' : 'only light' }}
+                    />
+                  </div>
+
+                  {/* Background notice */}
+                  <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    <span className={`w-2 h-2 rounded-full inline-block ${isFgLight ? 'bg-blue-500' : 'bg-emerald-500'}`} />
+                    <span>
+                      {options.isTransparent 
+                        ? (isFgLight ? 'Transparent Background Active (High-Contrast Dark Base)' : 'Transparent Background Active (High-Contrast White Base)')
+                        : `Custom Background: ${options.bgColor}`}
+                    </span>
+                  </div>
+                </>
+              );
+            })()}
 
             {/* Scannability Linter Badge */}
             <div className="w-full mt-4 space-y-2">
